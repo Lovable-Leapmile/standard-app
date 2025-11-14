@@ -4,11 +4,18 @@ import { isLoggedIn, extractPodNameFromUrl } from "@/utils/storage";
 import { apiService } from "@/services/api";
 import { hasApiBaseUrl, saveApiBaseUrl } from "@/utils/apiConfig";
 import { ApiBaseUrlPopup } from "@/components/ApiBaseUrlPopup";
+import { LocationSelectionPopup } from "@/components/LocationSelectionPopup";
+import { useMandatoryLocationSelection } from "@/hooks/useMandatoryLocationSelection";
 import Login from "./Login";
 
 const Index = () => {
   const navigate = useNavigate();
   const [showApiPopup, setShowApiPopup] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [shouldCheckLocation, setShouldCheckLocation] = useState(false);
+  const { needsLocationSelection, isChecking, onLocationConfirmed } = useMandatoryLocationSelection(
+    shouldCheckLocation ? userId : null
+  );
 
   useEffect(() => {
     // Check if API base URL is configured first
@@ -31,8 +38,17 @@ const Index = () => {
         });
     }
 
-    // Check if user is logged in and redirect accordingly
+    // Check if user is logged in
     if (isLoggedIn()) {
+      const userData = JSON.parse(localStorage.getItem('qikpod_user') || '{}');
+      setUserId(userData.id);
+      setShouldCheckLocation(true);
+    }
+  }, [navigate]);
+
+  // Handle navigation after location is confirmed or not needed
+  useEffect(() => {
+    if (!isChecking && shouldCheckLocation && !needsLocationSelection) {
       const userData = JSON.parse(localStorage.getItem('qikpod_user') || '{}');
       
       // Treat QPStaff as SiteAdmin
@@ -52,7 +68,7 @@ const Index = () => {
           navigate('/login');
       }
     }
-  }, [navigate]);
+  }, [isChecking, shouldCheckLocation, needsLocationSelection, navigate]);
 
   const handleApiBaseUrlSubmit = (baseUrl: string) => {
     saveApiBaseUrl(baseUrl);
@@ -64,6 +80,11 @@ const Index = () => {
   // Show API popup if not configured
   if (showApiPopup) {
     return <ApiBaseUrlPopup open={showApiPopup} onSubmit={handleApiBaseUrlSubmit} />;
+  }
+
+  // Show location selection popup if user is logged in but has no location
+  if (needsLocationSelection && userId && !isChecking) {
+    return <LocationSelectionPopup userId={userId} onLocationConfirmed={onLocationConfirmed} />;
   }
 
   // Show login page directly instead of redirecting

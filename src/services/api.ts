@@ -232,6 +232,46 @@ export const apiService = {
     }
   },
 
+  async getAllLocations(): Promise<LocationInfo[]> {
+    try {
+      const authToken = localStorage.getItem('auth_token');
+      const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
+      
+      const response = await fetch(
+        `${getBaseUrl()}/locations/`,
+        {
+          method: 'GET',
+          headers: {
+            'accept': 'application/json',
+            'Authorization': authorization
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch locations: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.records && data.records.length > 0) {
+        return data.records.map((location: any) => ({
+          id: location.id,
+          location_name: location.location_name,
+          address: location.location_address || '',
+          city: location.city || '',
+          state: location.state || '',
+          pincode: location.pincode || ''
+        }));
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching all locations:', error);
+      throw error;
+    }
+  },
+
   async addUserLocation(userId: number, locationId: string): Promise<void> {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
