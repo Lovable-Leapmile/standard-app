@@ -9,6 +9,7 @@ import { apiService } from "@/services/api";
 import { saveUserData, extractPodFromUrl, extractPodNameFromUrl, isLoggedIn } from "@/utils/storage";
 import { OTPInput } from "@/components/OTPInput";
 import { LocationDetectionPopup } from "@/components/LocationDetectionPopup";
+import { LocationSelectionPopup } from "@/components/LocationSelectionPopup";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
 const qikpodLogo = "https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png";
 
@@ -22,6 +23,7 @@ export default function Login() {
   const [countdown, setCountdown] = useState(0);
   const [userData, setUserData] = useState<any>(null);
   const [currentLocationId, setCurrentLocationId] = useState<string | null>(null);
+  const [showMandatoryLocationPopup, setShowMandatoryLocationPopup] = useState(false);
 
   const { showLocationPopup, closeLocationPopup } = useLocationDetection(
     userData?.id,
@@ -145,6 +147,16 @@ export default function Login() {
 
   const handlePostLoginFlow = async (userData: any) => {
     try {
+      // First check if user has a valid location
+      const needsLocationSelection = await checkUserLocation(userData.id);
+      
+      if (needsLocationSelection) {
+        setUserData(userData);
+        setShowMandatoryLocationPopup(true);
+        return;
+      }
+
+      // Then check for POD-specific flow
       const podName = localStorage.getItem('qikpod_pod_name');
       if (podName) {
         const podInfo = await apiService.getPodInfo(podName);
@@ -159,6 +171,36 @@ export default function Login() {
       navigateToUserDashboard(userData);
     } catch (error) {
       console.error('Post-login flow error:', error);
+      navigateToUserDashboard(userData);
+    }
+  };
+
+  const checkUserLocation = async (userId: number): Promise<boolean> => {
+    try {
+      const locations = await apiService.getUserLocations(userId);
+      
+      // Check if user has no locations or location_id is 0
+      const hasValidLocation = locations.length > 0 && 
+        locations.some(loc => loc.location_id && loc.location_id !== 0);
+      
+      return !hasValidLocation;
+    } catch (error: any) {
+      // If 401 error, clear auth and redirect to login
+      if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('qikpod_user');
+        window.location.href = '/login';
+        return false;
+      }
+      // If 404 or any other error, treat as no location
+      console.log('User location check:', error);
+      return true;
+    }
+  };
+
+  const handleMandatoryLocationConfirmed = () => {
+    setShowMandatoryLocationPopup(false);
+    if (userData) {
       navigateToUserDashboard(userData);
     }
   };
@@ -323,6 +365,13 @@ export default function Login() {
           </>
         )}
       </div>
+
+      {showMandatoryLocationPopup && userData && (
+        <LocationSelectionPopup
+          userId={userData.id}
+          onLocationConfirmed={handleMandatoryLocationConfirmed}
+        />
+      )}
 
       {userData && currentLocationId && (
         <LocationDetectionPopup
