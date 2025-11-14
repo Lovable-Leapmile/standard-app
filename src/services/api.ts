@@ -1,4 +1,9 @@
-const API_BASE_URL = 'https://productionv36.qikpod.com/podcore';
+import { getApiBaseUrl } from '@/utils/apiConfig';
+
+const getBaseUrl = (): string => {
+  return getApiBaseUrl() || 'https://productionv36.qikpod.com/podcore';
+};
+
 const AUTH_TOKEN = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkxMTYyMDE1OX0.RMEW55tHQ95GVap8ChrGdPRbuVxef4Shf0NRddNgGJo';
 
 export interface OTPResponse {
@@ -87,7 +92,7 @@ export interface Reservation {
 
 export const apiService = {
   async generateOTP(userPhone: string): Promise<OTPResponse> {
-    const response = await fetch(`${API_BASE_URL}/otp/generate_otp/?user_phone=${userPhone}`, {
+    const response = await fetch(`${getBaseUrl()}/otp/generate_otp/?user_phone=${userPhone}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -103,7 +108,7 @@ export const apiService = {
   },
 
   async validateOTP(userPhone: string, otpCode: string): Promise<ValidateOTPResponse> {
-    const response = await fetch(`${API_BASE_URL}/otp/validate_otp/?user_phone=${userPhone}&otp_text=${otpCode}`, {
+    const response = await fetch(`${getBaseUrl()}/otp/validate_otp/?user_phone=${userPhone}&otp_text=${otpCode}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -128,7 +133,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${API_BASE_URL}/users/locations/?user_id=${userId}&order_by_field=updated_at&order_by_type=DESC`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}&order_by_field=updated_at&order_by_type=DESC`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -147,7 +152,7 @@ export const apiService = {
   async getPodInfo(podName: string): Promise<PodInfo> {
     try {
       const response = await fetch(
-        `https://productionv36.qikpod.com/podcore/pods/?pod_name=${podName}`,
+        `${getBaseUrl()}/pods/?pod_name=${podName}`,
         {
           method: 'GET',
           headers: {
@@ -189,7 +194,7 @@ export const apiService = {
       const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
       
       const response = await fetch(
-        `https://productionv36.qikpod.com/podcore/locations/?record_id=${locationId}`,
+        `${getBaseUrl()}/locations/?record_id=${locationId}`,
         {
           method: 'GET',
           headers: {
@@ -231,7 +236,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${API_BASE_URL}/users/locations/`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -252,7 +257,7 @@ export const apiService = {
   async getReservations(phoneNum: string, locationId: string, status: string): Promise<Reservation[]> {
     try {
       const response = await fetch(
-        `https://productionv36.qikpod.com/podcore/reservations/?reservation_status=${status}&createdby_phone=${phoneNum}`,
+        `${getBaseUrl()}/reservations/?reservation_status=${status}&createdby_phone=${phoneNum}`,
         {
           method: 'GET',
           headers: {
@@ -305,7 +310,7 @@ export const apiService = {
     user_flatno: string;
     user_address: string;
   }): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/users/`, {
+    const response = await fetch(`${getBaseUrl()}/users/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -331,7 +336,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/doors/free_door/?location_id=${locationId}`, {
+    const response = await fetch(`${getBaseUrl()}/doors/free_door/?location_id=${locationId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -358,7 +363,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/reservations/create`, {
+    const response = await fetch(`${getBaseUrl()}/reservations/create`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -382,7 +387,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/reservations/?record_id=${reservationId}`, {
+    const response = await fetch(`${getBaseUrl()}/reservations/?record_id=${reservationId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -403,7 +408,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/reservations/resend_otp/?reservation_id=${reservationId}&otp_type=drop_otp`, {
+    const response = await fetch(`${getBaseUrl()}/reservations/resend_otp/?reservation_id=${reservationId}&otp_type=drop_otp`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -423,7 +428,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/reservations/cancel/${reservationId}`, {
+    const response = await fetch(`${getBaseUrl()}/reservations/cancel/${reservationId}`, {
       method: 'PATCH',
       headers: {
         'accept': 'application/json',
@@ -443,7 +448,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/users/locations/?user_id=${userId}&location_id=${locationId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}&location_id=${locationId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -469,7 +474,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/${userId}`, {
       method: 'PATCH',
       headers: {
         'accept': 'application/json',
@@ -489,7 +494,7 @@ export const apiService = {
   // Get users for a location (Site Admin)
   getLocationUsers: async (locationId: string): Promise<any[]> => {
     const token = localStorage.getItem('auth_token');
-    const response = await fetch(`${API_BASE_URL}/users/locations/?location_id=${locationId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/?location_id=${locationId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -509,7 +514,7 @@ export const apiService = {
   // Get reservations for a location (Site Admin)
   getLocationReservations: async (locationId: string, status: string): Promise<any[]> => {
     const token = localStorage.getItem('auth_token');
-    const response = await fetch(`${API_BASE_URL}/reservations/?location_id=${locationId}&reservation_status=${status}`, {
+    const response = await fetch(`${getBaseUrl()}/reservations/?location_id=${locationId}&reservation_status=${status}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -529,7 +534,7 @@ export const apiService = {
   // Remove user (Site Admin)
   removeUser: async (userId: number): Promise<void> => {
     const token = localStorage.getItem('auth_token');
-    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/${userId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -546,7 +551,7 @@ export const apiService = {
   // Get user by ID (for profile viewing)
   getUserById: async (userId: string): Promise<any> => {
     const token = localStorage.getItem('auth_token');
-    const response = await fetch(`${API_BASE_URL}/users/?record_id=${userId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/?record_id=${userId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -568,7 +573,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${API_BASE_URL}/users/locations/?user_id=${userId}&location_id=${locationId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}&location_id=${locationId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -590,7 +595,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${API_BASE_URL}/users/locations/${mappingId}`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/${mappingId}`, {
       method: 'DELETE',
       headers: {
         'accept': 'application/json',
@@ -606,7 +611,7 @@ export const apiService = {
 
   // Get user by phone number (to check user_type before OTP)
   getUserByPhone: async (userPhone: string): Promise<any> => {
-    const response = await fetch(`${API_BASE_URL}/users/?user_phone=${userPhone}`, {
+    const response = await fetch(`${getBaseUrl()}/users/?user_phone=${userPhone}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
