@@ -27,7 +27,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.VITE_APP_BASE || '/'}>
         <Routes>
           <Route path="/" element={<PageLayout pageTitle="Login" showBack={false} showSettings={false}><Index /></PageLayout>} />
           <Route path="/login" element={<PageLayout pageTitle="Login" showBack={false} showSettings={false}><Login /></PageLayout>} />
