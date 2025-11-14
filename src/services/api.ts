@@ -133,11 +133,12 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}&order_by_field=updated_at&order_by_type=DESC`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}`, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
         'Authorization': authorization,
+        'Content-Type': 'application/json',
       },
     });
 
