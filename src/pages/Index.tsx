@@ -20,9 +20,15 @@ const Index = () => {
   useEffect(() => {
     // Check environment variable - only show API popup in staging
     const environment = import.meta.env.VITE_ENVIRONMENT || 'production';
+    const productionBaseUrl = import.meta.env.VITE_API_BASE_URL;
     
-    // Check if API base URL is configured first (only in staging)
-    if (environment === 'staging' && !hasApiBaseUrl()) {
+    // If production and base URL is configured in env, use it
+    if (environment === 'production' && productionBaseUrl) {
+      if (!hasApiBaseUrl()) {
+        saveApiBaseUrl(productionBaseUrl);
+      }
+    } else if (environment === 'staging' && !hasApiBaseUrl()) {
+      // Only show popup in staging if not configured
       setShowApiPopup(true);
       return;
     }
