@@ -5,7 +5,15 @@ export const saveApiBaseUrl = (url: string): void => {
 };
 
 export const getApiBaseUrl = (): string | null => {
-  return localStorage.getItem(API_BASE_URL_KEY);
+  // First check localStorage
+  const storedUrl = localStorage.getItem(API_BASE_URL_KEY);
+  if (storedUrl) return storedUrl;
+  
+  // Fallback to environment variable if in production
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envUrl) return envUrl;
+  
+  return null;
 };
 
 export const hasApiBaseUrl = (): boolean => {
