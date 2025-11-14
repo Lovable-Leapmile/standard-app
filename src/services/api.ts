@@ -143,6 +143,12 @@ export const apiService = {
     });
 
     if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('404 Not Found - User has no locations');
+      }
+      if (response.status === 401) {
+        throw new Error('401 Unauthorized');
+      }
       throw new Error('Failed to get user locations');
     }
 
