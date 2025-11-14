@@ -1,13 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn, extractPodNameFromUrl } from "@/utils/storage";
 import { apiService } from "@/services/api";
+import { hasApiBaseUrl, saveApiBaseUrl } from "@/utils/apiConfig";
+import { ApiBaseUrlPopup } from "@/components/ApiBaseUrlPopup";
 import Login from "./Login";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [showApiPopup, setShowApiPopup] = useState(false);
 
   useEffect(() => {
+    // Check if API base URL is configured first
+    if (!hasApiBaseUrl()) {
+      setShowApiPopup(true);
+      return;
+    }
+
     // Extract pod name from URL on page load
     const podName = extractPodNameFromUrl();
     
@@ -44,6 +53,18 @@ const Index = () => {
       }
     }
   }, [navigate]);
+
+  const handleApiBaseUrlSubmit = (baseUrl: string) => {
+    saveApiBaseUrl(baseUrl);
+    setShowApiPopup(false);
+    // After setting API URL, continue with normal flow
+    window.location.reload();
+  };
+
+  // Show API popup if not configured
+  if (showApiPopup) {
+    return <ApiBaseUrlPopup open={showApiPopup} onSubmit={handleApiBaseUrlSubmit} />;
+  }
 
   // Show login page directly instead of redirecting
   return <Login />;
