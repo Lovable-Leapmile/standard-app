@@ -40,7 +40,21 @@ export const LocationSelectionPopup = ({ userId, onLocationConfirmed }: Location
       const data = await apiService.getAllLocations();
       setLocations(data);
       setFilteredLocations(data);
-    } catch (error) {
+    } catch (error: any) {
+      // If 401 error, clear auth and redirect to login
+      if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('qikpod_user');
+        toast({
+          title: "Session Expired",
+          description: "Please login again.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+        return;
+      }
       toast({
         title: "Error",
         description: "Failed to fetch locations. Please try again.",

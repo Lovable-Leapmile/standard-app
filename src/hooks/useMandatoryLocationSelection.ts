@@ -24,7 +24,14 @@ export const useMandatoryLocationSelection = (userId: number | null) => {
       
       setNeedsLocationSelection(!hasValidLocation);
     } catch (error: any) {
-      // If 404 or any error, treat as no location
+      // If 401 error, clear auth and redirect to login
+      if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('qikpod_user');
+        window.location.href = '/login';
+        return;
+      }
+      // If 404 or any other error, treat as no location
       console.log('User location check:', error);
       setNeedsLocationSelection(true);
     } finally {
