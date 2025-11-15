@@ -73,7 +73,7 @@ export function Header({
                           Profile
                         </Button>
                       </SheetClose>
-                      {user?.user_type !== 'SiteSecurity' && (
+                      {(user?.user_type === 'SiteAdmin' || user?.user_type === 'QPStaff' || user?.user_type === 'SiteSecurity') && (
                         <SheetClose asChild>
                           <Button variant="ghost" className="w-full justify-start h-12 px-4 rounded-none" onClick={() => navigate('/rto')}>
                             <Package className="mr-3 h-4 w-4" />

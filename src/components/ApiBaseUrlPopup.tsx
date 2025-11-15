@@ -38,9 +38,10 @@ export const ApiBaseUrlPopup = ({ open, onSubmit }: ApiBaseUrlPopupProps) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              className="w-full"
             />
             <p className="text-sm text-muted-foreground">
-              Full URL will be: https://{input || "yourdomain"}.com/podcore
+              Example: testhostharan.leapmile
             </p>
           </div>
           <Button onClick={handleSubmit} className="w-full" disabled={!input.trim()}>
