@@ -94,6 +94,26 @@ export interface Reservation {
   location_name?: string;
 }
 
+export interface FreeDoorResponse {
+  status: string;
+  status_code: number;
+  message: string;
+  timestamp: string;
+  count: number;
+  rowcount: number;
+  records: Array<{
+    pod_id: number;
+    door_number: number;
+  }>;
+  Free: number;
+  Jammed: number;
+  Reserved: number;
+  Inuse: number;
+  statusbool: boolean;
+  ok: boolean;
+  api_processing_time: number;
+}
+
 export const apiService = {
   async generateOTP(userPhone: string): Promise<OTPResponse> {
     const response = await fetch(`${getBaseUrl()}/otp/generate_otp/?user_phone=${userPhone}`, {
@@ -383,7 +403,7 @@ export const apiService = {
   },
 
   // Check for available doors at a location
-  checkFreeDoor: async (locationId: string): Promise<boolean> => {
+  checkFreeDoor: async (locationId: string): Promise<FreeDoorResponse | null> => {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
@@ -396,11 +416,11 @@ export const apiService = {
     });
 
     if (!response.ok) {
-      return false;
+      return null;
     }
 
-    const data = await response.json();
-    return data.statusbool || false;
+    const data: FreeDoorResponse = await response.json();
+    return data.statusbool ? data : null;
   },
 
   // Create a new reservation
