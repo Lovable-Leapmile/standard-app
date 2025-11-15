@@ -18,11 +18,20 @@ const Index = () => {
   );
 
   useEffect(() => {
-    // Always check if API base URL is configured
-    // Show popup if not configured, regardless of environment
-    if (!hasApiBaseUrl()) {
-      setShowApiPopup(true);
-      return;
+    const environment = import.meta.env.VITE_ENVIRONMENT;
+    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    // If production environment with API URL set, use it automatically
+    if (environment === 'production' && envApiUrl) {
+      if (!hasApiBaseUrl()) {
+        saveApiBaseUrl(envApiUrl);
+      }
+    } else {
+      // For staging, check if API base URL is configured
+      if (!hasApiBaseUrl()) {
+        setShowApiPopup(true);
+        return;
+      }
     }
 
     // Extract pod name from URL on page load
