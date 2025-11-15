@@ -26,7 +26,7 @@ export const ApiBaseUrlPopup = ({ open, onSubmit }: ApiBaseUrlPopupProps) => {
         <DialogHeader>
           <DialogTitle>Configure API Base URL</DialogTitle>
           <DialogDescription>
-            Please enter your domain to connect to the API server.
+            Please enter your domain to connect to the API server. This is required for the application to function.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">

@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PageLayout } from "@/components/PageLayout";
+import { ApiGuard } from "@/components/ApiGuard";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
@@ -28,7 +29,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter basename={import.meta.env.VITE_APP_BASE || '/'}>
-        <Routes>
+        <ApiGuard>
+          <Routes>
           <Route path="/" element={<PageLayout pageTitle="Login" showBack={false} showSettings={false}><Index /></PageLayout>} />
           <Route path="/login" element={<PageLayout pageTitle="Login" showBack={false} showSettings={false}><Login /></PageLayout>} />
           <Route path="/registration" element={<PageLayout pageTitle="Registration" showBack={true} showSettings={false}><Registration /></PageLayout>} />
@@ -44,7 +46,8 @@ const App = () => (
           <Route path="/how-it-works" element={<PageLayout pageTitle="How it Works" showBack={true} showSettings={false}><HowItWorks /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout pageTitle="Not Found" showBack={true}><NotFound /></PageLayout>} />
-        </Routes>
+          </Routes>
+        </ApiGuard>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

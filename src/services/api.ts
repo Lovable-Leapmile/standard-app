@@ -1,7 +1,11 @@
 import { getApiBaseUrl } from '@/utils/apiConfig';
 
 const getBaseUrl = (): string => {
-  return getApiBaseUrl() || 'https://productionv36.qikpod.com/podcore';
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) {
+    throw new Error('API Base URL is not configured. Please configure it first.');
+  }
+  return baseUrl;
 };
 
 const AUTH_TOKEN = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkxMTYyMDE1OX0.RMEW55tHQ95GVap8ChrGdPRbuVxef4Shf0NRddNgGJo';
