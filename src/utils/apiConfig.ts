@@ -5,15 +5,21 @@ export const saveApiBaseUrl = (url: string): void => {
 };
 
 export const getApiBaseUrl = (): string | null => {
-  // First check localStorage
+  const environment = import.meta.env.VITE_ENVIRONMENT;
+  
+  console.log("LOADED ENV:", environment);
+  
+  // In production: ALWAYS use the env variable
+  if (environment === 'production') {
+    const envUrl = import.meta.env.VITE_API_BASE_URL;
+    console.log("Production mode - using env URL:", envUrl);
+    return envUrl || null;
+  }
+  
+  // In staging: ONLY use localStorage (from popup)
   const storedUrl = localStorage.getItem(API_BASE_URL_KEY);
-  if (storedUrl) return storedUrl;
-  
-  // Fallback to environment variable if in production
-  const envUrl = import.meta.env.VITE_API_BASE_URL;
-  if (envUrl) return envUrl;
-  
-  return null;
+  console.log("Staging mode - using stored URL:", storedUrl);
+  return storedUrl;
 };
 
 export const hasApiBaseUrl = (): boolean => {
