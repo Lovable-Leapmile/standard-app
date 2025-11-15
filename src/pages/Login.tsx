@@ -81,12 +81,8 @@ export default function Login() {
       const user = await apiService.getUserByPhone(phoneNumber);
       
       if (!user) {
-        toast({
-          title: "User Not Found",
-          description: "This phone number is not registered. Please register first.",
-          variant: "destructive"
-        });
-        setLoading(false);
+        // Auto-redirect to registration page with phone number pre-filled
+        navigate(`/registration?phone=${phoneNumber}`);
         return;
       }
 

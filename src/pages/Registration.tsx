@@ -14,8 +14,13 @@ export default function Registration() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  
+  // Get phone number from URL params if redirected from login
+  const urlParams = new URLSearchParams(window.location.search);
+  const phoneFromUrl = urlParams.get('phone') || '';
+  
   const [formData, setFormData] = useState({
-    user_phone: "",
+    user_phone: phoneFromUrl,
     user_name: "",
     user_email: "",
     user_flatno: "",
@@ -125,7 +130,6 @@ export default function Registration() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <img src={qikpodLogo} alt="Qikpod" className="w-auto h-10 mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-foreground mb-2">Create Account</h1>
           <p className="text-muted-foreground">Register to get started with Qikpod</p>
         </div>

@@ -24,7 +24,7 @@ export default function Reservation() {
   const [locationName, setLocationName] = useState('Unknown Location');
   const [formData, setFormData] = useState({
     awbNumber: '',
-    executivePhone: ''
+    executivePhone: loggedInUser?.user_phone || ''
   });
   const [loading, setLoading] = useState(false);
   useEffect(() => {
