@@ -16,6 +16,7 @@ export default function Reservation() {
   const loggedInUser = getUserData();
   const podValue = getPodValue();
   const currentLocationId = localStorage.getItem('current_location_id');
+  const podId = searchParams.get('pod_id');
 
   // State for the user whose reservation we're creating (could be admin or customer)
   const [reservationUser, setReservationUser] = useState(loggedInUser);
@@ -93,11 +94,20 @@ export default function Reservation() {
     }
     setLoading(true);
     try {
+      if (!podId) {
+        toast({
+          title: "Error",
+          description: "Pod information is missing. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const reservationData = {
         created_by_phone: loggedInUser.user_phone,
         drop_by_phone: formData.executivePhone,
         pickup_by_phone: reservationUser.user_phone,
-        pod_id: "1001763",
+        pod_id: podId,
         reservation_awbno: formData.awbNumber
       };
       const response = await apiService.createReservation(reservationData);

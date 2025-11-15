@@ -150,9 +150,10 @@ export default function CustomerDashboard() {
     }
     try {
       setLoading(true);
-      const hasFreeDoor = await apiService.checkFreeDoor(locationId);
-      if (hasFreeDoor) {
-        navigate('/reservation');
+      const freeDoorData = await apiService.checkFreeDoor(locationId);
+      if (freeDoorData && freeDoorData.records && freeDoorData.records.length > 0) {
+        const podId = freeDoorData.records[0].pod_id;
+        navigate(`/reservation?pod_id=${podId}`);
       } else {
         toast({
           title: "No doors available",
