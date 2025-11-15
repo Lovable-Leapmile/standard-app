@@ -11,7 +11,19 @@ export const ApiGuard = ({ children }: ApiGuardProps) => {
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    // Check if API base URL is configured
+    const environment = import.meta.env.VITE_ENVIRONMENT;
+    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    // If production environment with API URL set, use it automatically
+    if (environment === 'production' && envApiUrl) {
+      if (!hasApiBaseUrl()) {
+        saveApiBaseUrl(envApiUrl);
+      }
+      setIsChecking(false);
+      return;
+    }
+
+    // For staging or if no env URL, check if API base URL is configured
     if (!hasApiBaseUrl()) {
       setShowApiPopup(true);
     }
