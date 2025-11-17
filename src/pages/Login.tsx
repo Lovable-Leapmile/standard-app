@@ -147,9 +147,25 @@ export default function Login() {
       const needsLocationSelection = await checkUserLocation(userData.id);
       
       if (needsLocationSelection) {
-        setUserData(userData);
-        setShowMandatoryLocationPopup(true);
-        return;
+        // Auto-assign first location if user has no location
+        try {
+          const locations = await apiService.getUserLocations(userData.id, 'updated_at', 'ASC');
+          if (locations.length > 0) {
+            const firstLocation = locations[0];
+            localStorage.setItem('current_location_id', firstLocation.location_id.toString());
+            console.log('Auto-assigned first location:', firstLocation.location_name);
+          } else {
+            // If still no locations, show selection popup
+            setUserData(userData);
+            setShowMandatoryLocationPopup(true);
+            return;
+          }
+        } catch (error) {
+          console.error('Error auto-assigning location:', error);
+          setUserData(userData);
+          setShowMandatoryLocationPopup(true);
+          return;
+        }
       }
 
       // Then check for POD-specific flow

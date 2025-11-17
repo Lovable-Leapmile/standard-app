@@ -3,6 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Package, Clock, ArrowLeft, MapPin, Phone, Calendar, User, RotateCcw, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { getUserData, isLoggedIn } from "@/utils/storage";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
@@ -35,6 +45,7 @@ export default function ReservationDetails() {
   const [reservationDetails, setReservationDetails] = useState<ReservationDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
   useEffect(() => {
     if (!isLoggedIn()) {
       navigate('/login');
@@ -113,6 +124,7 @@ export default function ReservationDetails() {
   const handleCancelReservation = async () => {
     if (!reservationId || !reservationDetails) return;
 
+    setShowCancelDialog(false);
     setActionLoading(true);
     try {
       await apiService.cancelReservation(reservationId);
@@ -196,17 +208,17 @@ export default function ReservationDetails() {
             {/* OTP Section - Enhanced Styling */}
             <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 p-4 mb-4">
               <div className="text-center mb-3">
-                <h4 className="text-sm font-semibold text-primary mb-1">🔐 Access Codes</h4>
+                <h4 className="text-sm font-semibold text-black mb-1">🔐 Access Codes</h4>
                 <p className="text-xs text-muted-foreground">Use these OTPs when prompted</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 rounded-lg bg-background/50 border">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">Drop OTP</p>
+                  <p className="text-xs font-medium text-black mb-1">Drop OTP</p>
                   <p className="text-lg font-mono font-bold text-primary tracking-wider">{getOTPDisplay('drop')}</p>
                 </div>
                 <div className="text-center p-3 rounded-lg bg-background/50 border">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">Pickup OTP</p>
+                  <p className="text-xs font-medium text-black mb-1">Pickup OTP</p>
                   <p className="text-lg font-mono font-bold text-primary tracking-wider">{getOTPDisplay('pickup')}</p>
                 </div>
               </div>
@@ -289,7 +301,7 @@ export default function ReservationDetails() {
 
           {/* Cancel Reservation Button */}
           <Button
-            onClick={handleCancelReservation}
+            onClick={() => setShowCancelDialog(true)}
             disabled={!canCancelReservation || actionLoading}
             variant="destructive"
             className="w-full h-12 flex items-center justify-center space-x-2"
@@ -303,5 +315,23 @@ export default function ReservationDetails() {
           </Button>
         </div>
       </div>
+
+      {/* Cancel Confirmation Dialog */}
+      <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel Reservation?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to cancel this reservation? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No, Keep It</AlertDialogCancel>
+            <AlertDialogAction onClick={handleCancelReservation} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Yes, Cancel Reservation
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>;
 }
