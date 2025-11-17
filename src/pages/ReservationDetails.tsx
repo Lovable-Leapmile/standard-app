@@ -3,16 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Package, Clock, ArrowLeft, MapPin, Phone, Calendar, User, RotateCcw, X } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { getUserData, isLoggedIn } from "@/utils/storage";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
@@ -97,10 +88,8 @@ export default function ReservationDetails() {
       return status === 'PickupPending' ? reservationDetails.pickup_otp || '*****' : '*****';
     }
   };
-
   const handleResendDropOTP = async () => {
     if (!reservationId || !reservationDetails) return;
-
     setActionLoading(true);
     try {
       await apiService.resendDropOTP(reservationId);
@@ -120,10 +109,8 @@ export default function ReservationDetails() {
       setActionLoading(false);
     }
   };
-
   const handleCancelReservation = async () => {
     if (!reservationId || !reservationDetails) return;
-
     setShowCancelDialog(false);
     setActionLoading(true);
     try {
@@ -148,7 +135,6 @@ export default function ReservationDetails() {
       setActionLoading(false);
     }
   };
-
   const canResendDropOTP = reservationDetails?.reservation_status === 'DropPending';
   const canCancelReservation = reservationDetails?.reservation_status === 'DropPending' || reservationDetails?.reservation_status === 'PickupPending';
   if (loading) {
@@ -215,7 +201,7 @@ export default function ReservationDetails() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 rounded-lg bg-background/50 border">
                   <p className="text-xs font-medium text-black mb-1">Drop OTP</p>
-                  <p className="text-lg font-mono font-bold text-primary tracking-wider">{getOTPDisplay('drop')}</p>
+                  <p className="text-lg font-mono font-bold tracking-wider text-black">{getOTPDisplay('drop')}</p>
                 </div>
                 <div className="text-center p-3 rounded-lg bg-background/50 border">
                   <p className="text-xs font-medium text-black mb-1">Pickup OTP</p>
@@ -289,23 +275,13 @@ export default function ReservationDetails() {
         {/* Action Buttons */}
         <div className="space-y-3 pb-6">
           {/* Re-send Drop OTP Button */}
-          <Button
-            onClick={handleResendDropOTP}
-            disabled={!canResendDropOTP || actionLoading}
-            variant="outline"
-            className="w-full h-12 flex items-center justify-center space-x-2"
-          >
+          <Button onClick={handleResendDropOTP} disabled={!canResendDropOTP || actionLoading} variant="outline" className="w-full h-12 flex items-center justify-center space-x-2">
             <RotateCcw className={`w-4 h-4 ${actionLoading ? 'animate-spin' : ''}`} />
             <span>Re-send Drop OTP</span>
           </Button>
 
           {/* Cancel Reservation Button */}
-          <Button
-            onClick={() => setShowCancelDialog(true)}
-            disabled={!canCancelReservation || actionLoading}
-            variant="destructive"
-            className="w-full h-12 flex items-center justify-center space-x-2"
-          >
+          <Button onClick={() => setShowCancelDialog(true)} disabled={!canCancelReservation || actionLoading} variant="destructive" className="w-full h-12 flex items-center justify-center space-x-2">
             <X className="w-4 h-4" />
             <span>Cancel Reservation</span>
           </Button>
