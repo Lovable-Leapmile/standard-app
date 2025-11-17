@@ -153,11 +153,19 @@ export const apiService = {
     return data;
   },
 
-  async getUserLocations(userId: number): Promise<UserLocation[]> {
+  async getUserLocations(userId: number, orderByField?: string, orderByType?: string): Promise<UserLocation[]> {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${getBaseUrl()}/users/locations/?user_id=${userId}`, {
+    let url = `${getBaseUrl()}/users/locations/?user_id=${userId}`;
+    if (orderByField) {
+      url += `&order_by_field=${orderByField}`;
+    }
+    if (orderByType) {
+      url += `&order_by_type=${orderByType}`;
+    }
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'accept': 'application/json',
