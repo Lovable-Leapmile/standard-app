@@ -699,7 +699,11 @@ export const apiService = {
     });
 
     if (!response.ok) {
-      throw new Error('User not found');
+      // Return null for 404 (user not found) to allow redirect to registration
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error('Failed to fetch user');
     }
 
     const data = await response.json();
