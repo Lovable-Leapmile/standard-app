@@ -12,10 +12,11 @@ import { LocationDetectionPopup } from "@/components/LocationDetectionPopup";
 import { LocationSelectionPopup } from "@/components/LocationSelectionPopup";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
 const qikpodLogo = "https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png";
-
 export default function Login() {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
@@ -24,19 +25,16 @@ export default function Login() {
   const [userData, setUserData] = useState<any>(null);
   const [currentLocationId, setCurrentLocationId] = useState<string | null>(null);
   const [showMandatoryLocationPopup, setShowMandatoryLocationPopup] = useState(false);
-
-  const { showLocationPopup, closeLocationPopup } = useLocationDetection(
-    userData?.id,
-    currentLocationId
-  );
-
+  const {
+    showLocationPopup,
+    closeLocationPopup
+  } = useLocationDetection(userData?.id, currentLocationId);
   useEffect(() => {
     if (isLoggedIn()) {
       const userData = JSON.parse(localStorage.getItem('qikpod_user') || '{}');
-      
+
       // Treat QPStaff as SiteAdmin
       const userType = userData.user_type === 'QPStaff' ? 'SiteAdmin' : userData.user_type;
-      
       switch (userType) {
         case 'SiteAdmin':
           navigate('/site-admin-dashboard');
@@ -52,10 +50,8 @@ export default function Login() {
       }
       return;
     }
-
     extractPodNameFromUrl();
   }, [navigate]);
-
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (countdown > 0) {
@@ -65,7 +61,6 @@ export default function Login() {
     }
     return () => clearInterval(interval);
   }, [countdown]);
-
   const handleSendOTP = async () => {
     if (!phoneNumber || phoneNumber.length !== 10) {
       toast({
@@ -79,7 +74,6 @@ export default function Login() {
     try {
       // Check user type before sending OTP
       const user = await apiService.getUserByPhone(phoneNumber);
-      
       if (!user) {
         // Auto-redirect to registration page with phone number pre-filled
         navigate(`/registration?phone=${phoneNumber}`);
@@ -104,7 +98,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-
   const handleVerifyOTP = async () => {
     if (!otp || otp.length !== 6) {
       toast({
@@ -118,12 +111,14 @@ export default function Login() {
     try {
       const response = await apiService.validateOTP(phoneNumber, otp);
       let userData = response.records[0];
-      
+
       // Treat QPStaff as SiteAdmin
       if (userData.user_type === 'QPStaff') {
-        userData = { ...userData, user_type: 'SiteAdmin' };
+        userData = {
+          ...userData,
+          user_type: 'SiteAdmin'
+        };
       }
-      
       saveUserData(userData);
       toast({
         title: "Login Successful",
@@ -140,12 +135,10 @@ export default function Login() {
       setLoading(false);
     }
   };
-
   const handlePostLoginFlow = async (userData: any) => {
     try {
       // First check if user has a valid location
       const needsLocationSelection = await checkUserLocation(userData.id);
-      
       if (needsLocationSelection) {
         // Auto-assign first location if user has no location
         try {
@@ -186,15 +179,12 @@ export default function Login() {
       navigateToUserDashboard(userData);
     }
   };
-
   const checkUserLocation = async (userId: number): Promise<boolean> => {
     try {
       const locations = await apiService.getUserLocations(userId);
-      
+
       // Check if user has no locations or location_id is 0
-      const hasValidLocation = locations.length > 0 && 
-        locations.some(loc => loc.location_id && loc.location_id !== 0);
-      
+      const hasValidLocation = locations.length > 0 && locations.some(loc => loc.location_id && loc.location_id !== 0);
       return !hasValidLocation;
     } catch (error: any) {
       // If 401 error, clear auth and redirect to login
@@ -209,18 +199,15 @@ export default function Login() {
       return true;
     }
   };
-
   const handleMandatoryLocationConfirmed = () => {
     setShowMandatoryLocationPopup(false);
     if (userData) {
       navigateToUserDashboard(userData);
     }
   };
-
   const navigateToUserDashboard = (userData: any) => {
     // Treat QPStaff as SiteAdmin
     const userType = userData.user_type === 'QPStaff' ? 'SiteAdmin' : userData.user_type;
-    
     switch (userType) {
       case 'SiteAdmin':
         navigate('/site-admin-dashboard');
@@ -235,25 +222,20 @@ export default function Login() {
         navigate('/login');
     }
   };
-
   const handleResendOTP = () => {
     if (countdown === 0) {
       handleSendOTP();
     }
   };
-
   const handleLocationPopupClose = () => {
     closeLocationPopup();
     if (userData) {
       navigateToUserDashboard(userData);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-qikpod-light-bg flex items-start justify-center p-4 py-[40px]">
+  return <div className="min-h-screen bg-qikpod-light-bg flex items-start justify-center p-4 py-[40px]">
       <div className="w-full max-w-md">
-        {step === 'phone' ? (
-          <>
+        {step === 'phone' ? <>
             <div className="text-center mb-8">
               <h1 className="font-bold text-foreground mb-2 text-left text-4xl">Login</h1>
               <p className="text-muted-foreground text-left">Sign in with your registered mobile number</p>
@@ -269,29 +251,15 @@ export default function Login() {
                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm font-medium">
                       +91
                     </span>
-                     <Input
-                       type="tel"
-                       placeholder="Enter Your Mobile Number"
-                       value={phoneNumber}
-                       onChange={e => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                       className="pl-12 h-12 text-base border-border/60 focus:border-primary"
-                       maxLength={10}
-                       autoFocus
-                     />
+                     <Input type="tel" placeholder="Enter Your Mobile Number" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} className="pl-12 h-12 text-base border-border/60 focus:border-primary" maxLength={10} autoFocus />
                   </div>
                 </div>
 
-                <Button
-                  onClick={handleSendOTP}
-                  disabled={loading || phoneNumber.length !== 10}
-                  className="btn-primary w-full h-12 text-base font-semibold"
-                >
-                  {loading ? (
-                    <>
+                <Button onClick={handleSendOTP} disabled={loading || phoneNumber.length !== 10} className="btn-primary w-full h-12 text-base font-semibold">
+                  {loading ? <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Sending OTP...
-                    </>
-                  ) : 'Continue with OTP'}
+                    </> : 'Continue with OTP'}
                 </Button>
               </div>
             </Card>
@@ -306,20 +274,13 @@ export default function Login() {
                 </a>
               </div>
               <div className="space-y-2 text-sm text-center">
-              <button onClick={() => navigate('/registration')} className="block text-black font-bold hover:text-gray-800 transition-colors mx-auto">
-                Not a Registered User? Need to Register
-              </button>
-              <button
-                onClick={() => navigate('/how-it-works')}
-                className="block text-muted-foreground hover:text-primary transition-colors mx-auto"
-              >
+              
+              <button onClick={() => navigate('/how-it-works')} className="block text-muted-foreground hover:text-primary transition-colors mx-auto">
                 How it works?
               </button>
             </div>
             </div>
-          </>
-        ) : (
-          <>
+          </> : <>
             <div className="text-center mb-8">
               <h1 className="font-bold text-foreground mb-2 text-left text-3xl">Verification Code</h1>
               <p className="text-muted-foreground mb-1 text-left">Enter 6-digit OTP</p>
@@ -331,68 +292,35 @@ export default function Login() {
             <Card className="card-modern p-6 mb-6 overflow-visible">
               <div className="space-y-6">
                 <div className="flex justify-center w-full">
-                  <OTPInput
-                    value={otp}
-                    onChange={setOtp}
-                    length={6}
-                    className="flex flex-wrap justify-center gap-2 w-full"
-                  />
+                  <OTPInput value={otp} onChange={setOtp} length={6} className="flex flex-wrap justify-center gap-2 w-full" />
                 </div>
 
-                <Button
-                  onClick={handleVerifyOTP}
-                  disabled={loading || otp.length !== 6}
-                  className="btn-primary w-full h-12 text-base font-semibold"
-                >
-                  {loading ? (
-                    <>
+                <Button onClick={handleVerifyOTP} disabled={loading || otp.length !== 6} className="btn-primary w-full h-12 text-base font-semibold">
+                  {loading ? <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Verifying...
-                    </>
-                  ) : 'Verify & Login'}
+                    </> : 'Verify & Login'}
                 </Button>
 
-                <Button
-                  onClick={handleResendOTP}
-                  disabled={countdown > 0}
-                  variant="outline"
-                  className="w-full h-12 text-base font-medium"
-                >
+                <Button onClick={handleResendOTP} disabled={countdown > 0} variant="outline" className="w-full h-12 text-base font-medium">
                   {countdown > 0 ? `Resend in ${countdown}s` : 'Resend OTP'}
                 </Button>
               </div>
             </Card>
 
             <div className="text-center">
-              <button
-                onClick={() => {
-                  setStep('phone');
-                  setOtp('');
-                }}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
+              <button onClick={() => {
+            setStep('phone');
+            setOtp('');
+          }} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Change number
               </button>
             </div>
-          </>
-        )}
+          </>}
       </div>
 
-      {showMandatoryLocationPopup && userData && (
-        <LocationSelectionPopup
-          userId={userData.id}
-          onLocationConfirmed={handleMandatoryLocationConfirmed}
-        />
-      )}
+      {showMandatoryLocationPopup && userData && <LocationSelectionPopup userId={userData.id} onLocationConfirmed={handleMandatoryLocationConfirmed} />}
 
-      {userData && currentLocationId && (
-        <LocationDetectionPopup
-          isOpen={showLocationPopup}
-          onClose={handleLocationPopupClose}
-          userId={userData.id}
-          locationId={currentLocationId}
-        />
-      )}
-    </div>
-  );
+      {userData && currentLocationId && <LocationDetectionPopup isOpen={showLocationPopup} onClose={handleLocationPopupClose} userId={userData.id} locationId={currentLocationId} />}
+    </div>;
 }
