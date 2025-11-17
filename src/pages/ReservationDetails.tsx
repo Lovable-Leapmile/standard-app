@@ -205,7 +205,7 @@ export default function ReservationDetails() {
                 </div>
                 <div className="text-center p-3 rounded-lg bg-background/50 border">
                   <p className="text-xs font-medium text-black mb-1">Pickup OTP</p>
-                  <p className="text-lg font-mono font-bold text-primary tracking-wider">{getOTPDisplay('pickup')}</p>
+                  <p className="text-lg font-mono font-bold tracking-wider text-black">{getOTPDisplay('pickup')}</p>
                 </div>
               </div>
             </Card>
