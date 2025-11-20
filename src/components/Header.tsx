@@ -34,9 +34,9 @@ export function Header({
   return <>
       <header className="bg-gradient-primary sticky top-0 z-50">
         <div className="mobile-container flex items-center justify-between ">
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <img src="https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png" alt="Qikpod" className="h-8 w-auto" />
-            <span className="text-qikpod-black font-semibold text-xs">{roleText}</span>
+            <span className="text-qikpod-black font-semibold text-xs leading-8">{roleText}</span>
           </div>
 
           {showSettings && <Sheet>
