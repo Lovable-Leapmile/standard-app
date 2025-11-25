@@ -708,5 +708,31 @@ export const apiService = {
 
     const data = await response.json();
     return data.records?.[0] || null;
+  },
+
+  // Add user to location
+  addUserToLocation: async (userId: number, locationId: string): Promise<any> => {
+    const authToken = localStorage.getItem('auth_token');
+    const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
+
+    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': authorization,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        location_id: locationId
+      }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.message || 'Failed to add user to location');
+    }
+
+    return response.json();
   }
 };
