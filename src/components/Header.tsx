@@ -50,7 +50,7 @@ export function Header({ title, showSettings = true }: HeaderProps) {
             <img
               src="https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png"
               alt="Qikpod"
-              className="h-8 w-auto ml-0 p-10"
+              className="h-8 w-auto ml-0 pl-10"
             />
             <span className="text-qikpod-black font-semibold text-xs leading-8">{roleText}</span>
           </div>
