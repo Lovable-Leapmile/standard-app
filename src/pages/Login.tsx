@@ -137,7 +137,22 @@ export default function Login() {
   };
   const handlePostLoginFlow = async (userData: any) => {
     try {
-      // First check if user has a valid location
+      // Check for POD-specific flow first
+      const podName = localStorage.getItem('qikpod_pod_name');
+      if (podName) {
+        const podInfo = await apiService.getPodInfo(podName);
+        localStorage.setItem('current_location_id', podInfo.location_id);
+        const userExistsAtLocation = await apiService.checkUserAtLocation(userData.id, podInfo.location_id);
+        if (!userExistsAtLocation) {
+          setUserData(userData);
+          setCurrentLocationId(podInfo.location_id);
+          return;
+        }
+        navigateToUserDashboard(userData);
+        return;
+      }
+
+      // If no pod_id, check if user has a valid location
       const needsLocationSelection = await checkUserLocation(userData.id);
       if (needsLocationSelection) {
         // Auto-assign first location if user has no location
@@ -146,6 +161,7 @@ export default function Login() {
           if (locations.length > 0) {
             const firstLocation = locations[0];
             localStorage.setItem('current_location_id', firstLocation.location_id.toString());
+            localStorage.setItem('current_location_name', firstLocation.location_name);
             console.log('Auto-assigned first location:', firstLocation.location_name);
           } else {
             // If still no locations, show selection popup
@@ -160,19 +176,7 @@ export default function Login() {
           return;
         }
       }
-
-      // Then check for POD-specific flow
-      const podName = localStorage.getItem('qikpod_pod_name');
-      if (podName) {
-        const podInfo = await apiService.getPodInfo(podName);
-        localStorage.setItem('current_location_id', podInfo.location_id);
-        const userExistsAtLocation = await apiService.checkUserAtLocation(userData.id, podInfo.location_id);
-        if (!userExistsAtLocation) {
-          setUserData(userData);
-          setCurrentLocationId(podInfo.location_id);
-          return;
-        }
-      }
+      
       navigateToUserDashboard(userData);
     } catch (error) {
       console.error('Post-login flow error:', error);

@@ -211,9 +211,22 @@ export default function SiteSecurityDashboard() {
   };
 
   const handleAddUser = async () => {
+    if (!currentLocationId) {
+      toast.error("No location selected");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await apiService.registerUser(newUserForm);
+      // First create the user
+      const response = await apiService.registerUser(newUserForm);
+      const newUserId = response.id || response.user_id;
+
+      // Then add the user to the current location
+      if (newUserId) {
+        await apiService.addUserToLocation(newUserId, currentLocationId);
+      }
+
       toast.success("User added successfully!");
       setShowAddUserDialog(false);
       setNewUserForm({
@@ -248,9 +261,27 @@ export default function SiteSecurityDashboard() {
     }
   };
 
-  const handleConfirmUserForReservation = () => {
-    if (selectedUser && currentLocationId) {
-      navigate(`/reservation?user_id=${selectedUser.user_id}&location_id=${currentLocationId}`);
+  const handleConfirmUserForReservation = async () => {
+    if (!selectedUser || !currentLocationId) return;
+
+    setIsLoading(true);
+    try {
+      // Check for free door first
+      const freeDoorResponse = await apiService.checkFreeDoor(currentLocationId);
+      
+      if (!freeDoorResponse || !freeDoorResponse.records || freeDoorResponse.records.length === 0) {
+        toast.error("No free doors available at this location");
+        setIsLoading(false);
+        return;
+      }
+
+      const podId = freeDoorResponse.records[0].pod_id;
+      navigate(`/reservation?user_id=${selectedUser.user_id}&location_id=${currentLocationId}&pod_id=${podId}`);
+    } catch (error) {
+      console.error("Error checking free door:", error);
+      toast.error("Failed to check door availability");
+    } finally {
+      setIsLoading(false);
     }
   };
 
