@@ -107,8 +107,7 @@ export function Header({ title, showSettings = true }: HeaderProps) {
                         </Button>
                       </SheetClose>
                       {(user?.user_type === "SiteAdmin" ||
-                        user?.user_type === "QPStaff" ||
-                        user?.user_type === "SiteSecurity") && (
+                        user?.user_type === "QPStaff") && (
                         <SheetClose asChild>
                           <Button
                             variant="ghost"
