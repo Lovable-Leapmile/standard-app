@@ -44,8 +44,8 @@ export function Header({ title, showSettings = true }: HeaderProps) {
 
   return (
     <>
-      <header className="bg-gradient-primary sticky top-0 z-50">
-        <div className="mobile-container flex items-center justify-between px-0">
+      <header className="bg-gradient-primary sticky top-0 z-50 h-16">
+        <div className="mobile-container flex items-center justify-between px-0 h-full">
           <div className="flex items-center gap-2 pl-0 ml-0">
             <img
               src="https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png"
