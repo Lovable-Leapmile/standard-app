@@ -241,21 +241,7 @@ export default function RTO() {
               <CheckCircle className="w-5 h-5 text-green-600" />
             )}
           </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-foreground">{reservation.user_name || 'Unknown User'}</h3>
-            <p className="text-sm text-muted-foreground">AWB: {reservation.awb_number || 'N/A'}</p>
-          </div>
-        </div>
-
         <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-muted-foreground" />
-            <span>{reservation.user_phone || 'No phone'}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-muted-foreground" />
-            <span>Created: {reservation.created_at ? new Date(reservation.created_at).toLocaleDateString() : 'Unknown date'}</span>
-          </div>
           {activeTab === 'completed' && reservation.rto_picktime && (
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-600" />
@@ -271,17 +257,13 @@ export default function RTO() {
           </div>
           <div className={`grid gap-3 ${activeTab === 'pending' ? 'grid-cols-2' : 'grid-cols-3'}`}>
             <div className="text-center p-2 rounded bg-background/50 border">
-              <p className="text-xs text-muted-foreground mb-1">Drop</p>
-              <p className="text-sm font-mono font-bold text-primary">{reservation.drop_otp || '*****'}</p>
-            </div>
-            <div className="text-center p-2 rounded bg-background/50 border">
-              <p className="text-xs text-muted-foreground mb-1">Pickup</p>
-              <p className="text-sm font-mono font-bold text-primary">{reservation.pickup_otp || '*****'}</p>
-            </div>
+                <p className="text-xs text-muted-foreground mb-1">RTO</p>
+                <p className="text-sm font-mono font-bold text-primary">{reservation.rto_otp || '*****'}</p>
+              </div>
             {activeTab === 'completed' && (
               <div className="text-center p-2 rounded bg-background/50 border">
                 <p className="text-xs text-muted-foreground mb-1">RTO</p>
-                <p className="text-sm font-mono font-bold text-primary">{reservation.rto_otp || '*****'}</p>
+                <p className="text-sm font-mono font-bold text-primary">'*****'}</p>
               </div>
             )}
           </div>
