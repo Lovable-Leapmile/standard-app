@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -80,23 +87,20 @@ export default function SiteAdminDashboard() {
     user_email: "",
     user_phone: "",
     user_address: "",
-    user_flatno: ""
+    user_flatno: "",
   });
 
   // Location detection
-  const currentLocationId = localStorage.getItem('current_location_id');
-  const {
-    showLocationPopup,
-    closeLocationPopup
-  } = useLocationDetection(user?.id, currentLocationId);
+  const currentLocationId = localStorage.getItem("current_location_id");
+  const { showLocationPopup, closeLocationPopup } = useLocationDetection(user?.id, currentLocationId);
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
-    if (user?.user_type !== 'SiteAdmin') {
-      navigate('/login');
+    if (user?.user_type !== "SiteAdmin") {
+      navigate("/login");
       return;
     }
 
@@ -157,11 +161,11 @@ export default function SiteAdminDashboard() {
       console.log("API Response:", reservationList);
       if (reservationList && Array.isArray(reservationList)) {
         // Map the data to ensure proper field names
-        const mappedReservations = reservationList.map(reservation => ({
+        const mappedReservations = reservationList.map((reservation) => ({
           ...reservation,
           user_name: reservation.user_name || reservation.created_by_name || "Unknown User",
           awb_number: reservation.awb_number || reservation.reservation_awbno || "N/A",
-          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A"
+          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A",
         }));
         setReservations(mappedReservations);
         setError(null);
@@ -186,11 +190,11 @@ export default function SiteAdminDashboard() {
       console.log("API Response:", historyList);
       if (historyList && Array.isArray(historyList)) {
         // Map the data to ensure proper field names
-        const mappedHistory = historyList.map(reservation => ({
+        const mappedHistory = historyList.map((reservation) => ({
           ...reservation,
           user_name: reservation.user_name || reservation.created_by_name || "Unknown User",
           awb_number: reservation.awb_number || reservation.reservation_awbno || "N/A",
-          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A"
+          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A",
         }));
         setReservations(mappedHistory);
         setError(null);
@@ -231,7 +235,7 @@ export default function SiteAdminDashboard() {
         user_email: "",
         user_phone: "",
         user_address: "",
-        user_flatno: ""
+        user_flatno: "",
       });
       if (activeTab === "users") {
         await loadLocationUsers();
@@ -287,7 +291,7 @@ export default function SiteAdminDashboard() {
     try {
       // Check for free door first
       const freeDoorResponse = await apiService.checkFreeDoor(currentLocationId);
-      
+
       if (!freeDoorResponse || !freeDoorResponse.records || freeDoorResponse.records.length === 0) {
         toast.error("No free doors available at this location");
         setIsLoading(false);
@@ -312,8 +316,24 @@ export default function SiteAdminDashboard() {
     navigate(`/reservation-details/${reservation.id}`);
   };
 
-  const filteredUsers = Array.isArray(locationUsers) ? locationUsers.filter(user => user.user_type === "Customer" && (user.user_name.toLowerCase().includes(searchQuery.toLowerCase()) || user.user_phone.includes(searchQuery) || user.user_email.toLowerCase().includes(searchQuery.toLowerCase()) || user.user_flatno.toLowerCase().includes(searchQuery.toLowerCase()))) : [];
-  const filteredReservations = Array.isArray(reservations) ? reservations.filter(reservation => reservation.user_name.toLowerCase().includes(searchQuery.toLowerCase()) || reservation.user_phone.includes(searchQuery) || reservation.awb_number.toLowerCase().includes(searchQuery.toLowerCase())) : [];
+  const filteredUsers = Array.isArray(locationUsers)
+    ? locationUsers.filter(
+        (user) =>
+          user.user_type === "Customer" &&
+          (user.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.user_phone.includes(searchQuery) ||
+            user.user_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.user_flatno.toLowerCase().includes(searchQuery.toLowerCase())),
+      )
+    : [];
+  const filteredReservations = Array.isArray(reservations)
+    ? reservations.filter(
+        (reservation) =>
+          reservation.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          reservation.user_phone.includes(searchQuery) ||
+          reservation.awb_number.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    : [];
 
   // Pagination calculations for users
   const totalUsers = filteredUsers.length;
@@ -334,13 +354,6 @@ export default function SiteAdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <div className="p-4 max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Site Admin Dashboard
-          </h1>
-        </div>
-
         {/* Error Display */}
         {error && (
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-destructive">
@@ -394,7 +407,11 @@ export default function SiteAdminDashboard() {
               totalPages={activeTab === "users" ? totalUserPages : totalReservationPages}
               onPageChange={setCurrentPage}
               totalItems={activeTab === "users" ? totalUsers : totalReservations}
-              placeholder={activeTab === "users" ? "Search users by name, phone, email, or flat number..." : "Search reservations by name, phone, or AWB number..."}
+              placeholder={
+                activeTab === "users"
+                  ? "Search users by name, phone, email, or flat number..."
+                  : "Search reservations by name, phone, or AWB number..."
+              }
             />
           </div>
 
@@ -409,8 +426,12 @@ export default function SiteAdminDashboard() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentUsers.map(locationUser => (
-                  <Card key={locationUser.id} className="p-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden" onClick={() => handleUserCardClick(locationUser)}>
+                {currentUsers.map((locationUser) => (
+                  <Card
+                    key={locationUser.id}
+                    className="p-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+                    onClick={() => handleUserCardClick(locationUser)}
+                  >
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
@@ -450,11 +471,19 @@ export default function SiteAdminDashboard() {
               </TabsList>
 
               <TabsContent value="pickup-pending" className="space-y-4">
-                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} searchQuery={searchQuery} />
+                <ReservationList
+                  reservations={currentReservations}
+                  onReservationClick={handleReservationCardClick}
+                  searchQuery={searchQuery}
+                />
               </TabsContent>
 
               <TabsContent value="drop-pending" className="space-y-4">
-                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} searchQuery={searchQuery} />
+                <ReservationList
+                  reservations={currentReservations}
+                  onReservationClick={handleReservationCardClick}
+                  searchQuery={searchQuery}
+                />
               </TabsContent>
             </Tabs>
           </TabsContent>
@@ -468,11 +497,19 @@ export default function SiteAdminDashboard() {
               </TabsList>
 
               <TabsContent value="drop-cancelled" className="space-y-4">
-                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} searchQuery={searchQuery} />
+                <ReservationList
+                  reservations={currentReservations}
+                  onReservationClick={handleReservationCardClick}
+                  searchQuery={searchQuery}
+                />
               </TabsContent>
 
               <TabsContent value="pickup-completed" className="space-y-4">
-                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} searchQuery={searchQuery} />
+                <ReservationList
+                  reservations={currentReservations}
+                  onReservationClick={handleReservationCardClick}
+                  searchQuery={searchQuery}
+                />
               </TabsContent>
             </Tabs>
           </TabsContent>
@@ -481,15 +518,10 @@ export default function SiteAdminDashboard() {
 
       {/* Add User Dialog */}
       <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
-        <DialogContent
-          className="max-w-md max-h-[90vh] overflow-y-auto"
-          onOpenAutoFocus={(e) => e.preventDefault()}
-        >
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Add New User</DialogTitle>
-            <DialogDescription>
-              Create a new user account for this location.
-            </DialogDescription>
+            <DialogDescription>Create a new user account for this location.</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 max-h-[60vh] overflow-y-auto p-1">
@@ -498,10 +530,12 @@ export default function SiteAdminDashboard() {
               <Input
                 id="name"
                 value={newUserForm.user_name}
-                onChange={e => setNewUserForm(prev => ({
-                  ...prev,
-                  user_name: e.target.value
-                }))}
+                onChange={(e) =>
+                  setNewUserForm((prev) => ({
+                    ...prev,
+                    user_name: e.target.value,
+                  }))
+                }
                 placeholder="Enter full name"
                 disabled={isLoading}
                 autoFocus={false}
@@ -514,10 +548,12 @@ export default function SiteAdminDashboard() {
                 id="email"
                 type="email"
                 value={newUserForm.user_email}
-                onChange={e => setNewUserForm(prev => ({
-                  ...prev,
-                  user_email: e.target.value
-                }))}
+                onChange={(e) =>
+                  setNewUserForm((prev) => ({
+                    ...prev,
+                    user_email: e.target.value,
+                  }))
+                }
                 placeholder="Enter email address"
                 disabled={isLoading}
               />
@@ -528,11 +564,11 @@ export default function SiteAdminDashboard() {
               <Input
                 id="phone"
                 value={newUserForm.user_phone}
-                onChange={e => {
-                  const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setNewUserForm(prev => ({
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                  setNewUserForm((prev) => ({
                     ...prev,
-                    user_phone: value
+                    user_phone: value,
                   }));
                 }}
                 placeholder="Enter phone number"
@@ -546,10 +582,12 @@ export default function SiteAdminDashboard() {
               <Input
                 id="flatno"
                 value={newUserForm.user_flatno}
-                onChange={e => setNewUserForm(prev => ({
-                  ...prev,
-                  user_flatno: e.target.value
-                }))}
+                onChange={(e) =>
+                  setNewUserForm((prev) => ({
+                    ...prev,
+                    user_flatno: e.target.value,
+                  }))
+                }
                 placeholder="Enter flat/unit number"
                 disabled={isLoading}
               />
@@ -560,10 +598,12 @@ export default function SiteAdminDashboard() {
               <Textarea
                 id="address"
                 value={newUserForm.user_address}
-                onChange={e => setNewUserForm(prev => ({
-                  ...prev,
-                  user_address: e.target.value
-                }))}
+                onChange={(e) =>
+                  setNewUserForm((prev) => ({
+                    ...prev,
+                    user_address: e.target.value,
+                  }))
+                }
                 placeholder="Enter full address"
                 rows={3}
                 disabled={isLoading}
@@ -590,9 +630,7 @@ export default function SiteAdminDashboard() {
         >
           <DialogHeader>
             <DialogTitle>Select User for Reservation</DialogTitle>
-            <DialogDescription>
-              Choose a user to create a reservation for.
-            </DialogDescription>
+            <DialogDescription>Choose a user to create a reservation for.</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
@@ -601,7 +639,7 @@ export default function SiteAdminDashboard() {
               <Input
                 placeholder="Search users..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
                 autoFocus={false}
               />
@@ -613,8 +651,12 @@ export default function SiteAdminDashboard() {
               ) : filteredUsers.length === 0 ? (
                 <div className="text-center py-4 text-muted-foreground">No users found</div>
               ) : (
-                filteredUsers.map(locationUser => (
-                  <Card key={locationUser.id} className="p-3 cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleSelectUserForReservation(locationUser)}>
+                filteredUsers.map((locationUser) => (
+                  <Card
+                    key={locationUser.id}
+                    className="p-3 cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => handleSelectUserForReservation(locationUser)}
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                         <User className="w-4 h-4 text-primary" />
@@ -643,9 +685,7 @@ export default function SiteAdminDashboard() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Confirm User Selection</DialogTitle>
-            <DialogDescription>
-              Create a reservation for this user?
-            </DialogDescription>
+            <DialogDescription>Create a reservation for this user?</DialogDescription>
           </DialogHeader>
 
           {selectedUser && (
@@ -669,9 +709,7 @@ export default function SiteAdminDashboard() {
             <Button variant="outline" onClick={() => setShowConfirmUserDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleConfirmUserForReservation}>
-              Confirm
-            </Button>
+            <Button onClick={handleConfirmUserForReservation}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -715,7 +753,12 @@ export default function SiteAdminDashboard() {
       </Dialog>
 
       {/* Location Detection Popup */}
-      <LocationDetectionPopup isOpen={showLocationPopup} onClose={closeLocationPopup} userId={user?.id || 0} locationId={currentLocationId || ""} />
+      <LocationDetectionPopup
+        isOpen={showLocationPopup}
+        onClose={closeLocationPopup}
+        userId={user?.id || 0}
+        locationId={currentLocationId || ""}
+      />
     </div>
   );
 }
@@ -724,7 +767,7 @@ export default function SiteAdminDashboard() {
 function ReservationList({
   reservations,
   onReservationClick,
-  searchQuery
+  searchQuery,
 }: {
   reservations: Reservation[];
   onReservationClick: (reservation: Reservation) => void;
@@ -753,16 +796,18 @@ function ReservationList({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {reservations.map(reservation => (
-        <Card key={reservation.id} className="p-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden" onClick={() => onReservationClick(reservation)}>
+      {reservations.map((reservation) => (
+        <Card
+          key={reservation.id}
+          className="p-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+          onClick={() => onReservationClick(reservation)}
+        >
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
               <Package className="w-5 h-5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground truncate">
-                {reservation.user_name || "Unknown User"}
-              </h3>
+              <h3 className="font-semibold text-foreground truncate">{reservation.user_name || "Unknown User"}</h3>
               <div className="space-y-1 text-sm text-muted-foreground">
                 <div className="truncate">AWB: {reservation.awb_number || "N/A"}</div>
                 <div className="truncate">Phone: {reservation.user_phone || "N/A"}</div>
