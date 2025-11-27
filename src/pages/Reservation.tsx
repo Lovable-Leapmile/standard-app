@@ -10,31 +10,29 @@ import { apiService } from "@/services/api";
 export default function Reservation() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const loggedInUser = getUserData();
   const podValue = getPodValue();
-  const currentLocationId = localStorage.getItem('current_location_id');
-  const podId = searchParams.get('pod_id');
+  const currentLocationId = localStorage.getItem("current_location_id");
+  const podId = searchParams.get("pod_id");
 
   // State for the user whose reservation we're creating (could be admin or customer)
   const [reservationUser, setReservationUser] = useState(loggedInUser);
   const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
-  const [locationName, setLocationName] = useState('Unknown Location');
+  const [locationName, setLocationName] = useState("Unknown Location");
   const [formData, setFormData] = useState({
-    awbNumber: '',
-    executivePhone: loggedInUser?.user_phone || ''
+    awbNumber: "",
+    executivePhone: loggedInUser?.user_phone || "",
   });
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
     // Check if we're creating a reservation for a specific customer
-    const userId = searchParams.get('user_id');
+    const userId = searchParams.get("user_id");
     if (userId) {
       loadCustomerData(userId);
     }
@@ -52,11 +50,11 @@ export default function Reservation() {
         setReservationUser(customerData);
       }
     } catch (error) {
-      console.error('Error loading customer data:', error);
+      console.error("Error loading customer data:", error);
       toast({
         title: "Error",
         description: "Failed to load customer data.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoadingCustomer(false);
@@ -65,13 +63,13 @@ export default function Reservation() {
 
   const loadLocationInfo = async () => {
     if (!currentLocationId) return;
-    
+
     try {
       const locationInfo = await apiService.getLocationInfo(currentLocationId);
-      setLocationName(locationInfo.location_name || 'Unknown Location');
+      setLocationName(locationInfo.location_name || "Unknown Location");
     } catch (error) {
-      console.error('Error loading location info:', error);
-      setLocationName('Unknown Location');
+      console.error("Error loading location info:", error);
+      setLocationName("Unknown Location");
     }
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,7 +78,7 @@ export default function Reservation() {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -88,7 +86,7 @@ export default function Reservation() {
       toast({
         title: "Error",
         description: "User information not found.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -98,7 +96,7 @@ export default function Reservation() {
         toast({
           title: "Error",
           description: "Pod information is missing. Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -108,26 +106,27 @@ export default function Reservation() {
         drop_by_phone: formData.executivePhone,
         pickup_by_phone: reservationUser.user_phone,
         pod_id: podId,
-        reservation_awbno: formData.awbNumber
+        reservation_awbno: formData.awbNumber,
       };
       const response = await apiService.createReservation(reservationData);
       toast({
         title: "Reservation Created",
-        description: "Your reservation has been created successfully."
+        description: "Your reservation has been created successfully.",
       });
       navigate(`/reservation-details/${response.reservation_id}`);
     } catch (error: any) {
-      console.error('Error creating reservation:', error);
+      console.error("Error creating reservation:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to create reservation.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       <div className="mobile-container space-y-6">
         {/* User & Location Info */}
         <Card className="card-3d bg-gradient-primary p-6 text-qikpod-black animate-fade-in">
@@ -135,27 +134,18 @@ export default function Reservation() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Package className="w-8 h-8 opacity-30" />
-                <div>
-                  <h2 className="text-lg font-bold">{locationName}</h2>
-                  <p className="text-sm opacity-80">Location</p>
-                </div>
+                <h2 className="text-lg font-bold">{locationName}</h2>
               </div>
-              
             </div>
             <div className="grid grid-cols-1 gap-2 mt-4">
               <div>
                 <p className="text-sm font-medium">User Name</p>
-                <p className="text-base">
-                  {isLoadingCustomer ? 'Loading...' : reservationUser?.user_name || 'N/A'}
-                </p>
+                <p className="text-base">{isLoadingCustomer ? "Loading..." : reservationUser?.user_name || "N/A"}</p>
               </div>
               <div>
                 <p className="text-sm font-medium">Phone Number</p>
-                <p className="text-base">
-                  {isLoadingCustomer ? 'Loading...' : reservationUser?.user_phone || 'N/A'}
-                </p>
+                <p className="text-base">{isLoadingCustomer ? "Loading..." : reservationUser?.user_phone || "N/A"}</p>
               </div>
-              
             </div>
           </div>
         </Card>
@@ -169,37 +159,45 @@ export default function Reservation() {
               <label className="text-sm font-medium text-foreground mb-2 block">
                 Enter AWB No. / Product Details *
               </label>
-              <Input value={formData.awbNumber} onChange={e => setFormData(prev => ({
-              ...prev,
-              awbNumber: e.target.value
-            }))} placeholder="Enter AWB number or product details" className="h-12" />
+              <Input
+                value={formData.awbNumber}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    awbNumber: e.target.value,
+                  }))
+                }
+                placeholder="Enter AWB number or product details"
+                className="h-12"
+              />
             </div>
 
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">
                 Enter the Delivery Executive Phone Number *
               </label>
-              <Input 
-                value={formData.executivePhone} 
-                onChange={e => {
-                  const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  setFormData(prev => ({
+              <Input
+                value={formData.executivePhone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                  setFormData((prev) => ({
                     ...prev,
-                    executivePhone: value
+                    executivePhone: value,
                   }));
-                }} 
-                placeholder="Enter delivery executive phone number" 
-                type="tel" 
-                className="h-12" 
+                }}
+                placeholder="Enter delivery executive phone number"
+                type="tel"
+                className="h-12"
                 maxLength={10}
               />
             </div>
 
             <Button type="submit" disabled={loading} className="btn-qikpod w-full h-12">
-              {loading ? 'Processing...' : 'Proceed'}
+              {loading ? "Processing..." : "Proceed"}
             </Button>
           </form>
         </Card>
       </div>
-    </div>;
+    </div>
+  );
 }
