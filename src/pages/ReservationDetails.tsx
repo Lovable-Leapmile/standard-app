@@ -187,7 +187,7 @@ export default function ReservationDetails() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div className="flex items-center space-x-3">
-              <Package className="w-8 h-8 opacity-30" />
+              <Package className="w-5 h-5 text-gray-800 opacity-40" />
               <div>
                 <h2 className="text-lg font-bold">{reservationDetails.pod_name}</h2>
               </div>
@@ -240,7 +240,7 @@ export default function ReservationDetails() {
         {/* Contact Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Phone className="w-5 h-5 mr-2 text-primary" />
+            <Phone className="w-5 h-5 text-gray-800 opacity-40" />
             Contact Information
           </h3>
 
@@ -261,7 +261,7 @@ export default function ReservationDetails() {
         {/* Timing Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-primary" />
+            <Calender className="w-5 h-5 text-gray-800 opacity-40" />
             Timing Information
           </h3>
 
