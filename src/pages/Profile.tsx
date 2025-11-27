@@ -305,6 +305,7 @@ export default function Profile() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Button
+                type="button"
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate(-1)}
