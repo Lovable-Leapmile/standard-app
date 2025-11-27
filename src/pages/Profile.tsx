@@ -335,7 +335,7 @@ export default function Profile() {
               <Card key={item.label} className="card-modern p-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-primary" />
+                    <item.icon className="w-5 h-5 text-gray-800 opacity-40" />
                   </div>
                   <div className="flex-1">
                     <Label className="text-sm text-muted-foreground">{item.label}</Label>
