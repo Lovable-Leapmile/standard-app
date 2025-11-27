@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Package, Clock, Settings, User, MapPin, HelpCircle, LogOut, Home } from "lucide-react";
+import { Package, Clock, MapPin } from "lucide-react";
 import { apiService, Reservation as APIReservation } from "@/services/api";
 import { getUserData, isLoggedIn, getPodName, getLocationId } from "@/utils/storage";
 import { useToast } from "@/hooks/use-toast";
@@ -223,7 +223,18 @@ export default function CustomerDashboard() {
         return 'outline';
     }
   };
+  const currentLocationName = localStorage.getItem('current_location_name');
+
   return <div className="min-h-screen bg-background">
+      {/* Location Name Banner */}
+      {currentLocationName && (
+        <div className="bg-primary/10 border-b border-primary/20 py-2 px-4">
+          <div className="max-w-md mx-auto flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">{currentLocationName}</span>
+          </div>
+        </div>
+      )}
 
       {/* Create Reservation Button */}
       <div className="py-4 max-w-md mx-auto px-[14px]">

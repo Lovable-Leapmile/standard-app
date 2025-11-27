@@ -186,7 +186,7 @@ export default function ReservationDetails() {
             Location & Details
           </h3>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Location</p>
               <p className="text-base text-foreground">{reservationDetails.location_name || 'N/A'}</p>
@@ -210,14 +210,17 @@ export default function ReservationDetails() {
               </div>
             </Card>
 
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">AWB Number</p>
-              <p className="text-base text-foreground">{reservationDetails.reservation_awbno || 'N/A'}</p>
-            </div>
+            {/* AWB Number and Flat Number - Side by Side */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">AWB Number</p>
+                <p className="text-base text-foreground">{reservationDetails.reservation_awbno || 'N/A'}</p>
+              </div>
 
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Flat Number</p>
-              <p className="text-base text-foreground">{reservationDetails.user_flatno || user?.user_flatno || 'N/A'}</p>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Flat Number</p>
+                <p className="text-base text-foreground">{reservationDetails.user_flatno || user?.user_flatno || 'N/A'}</p>
+              </div>
             </div>
           </div>
         </Card>
@@ -229,7 +232,8 @@ export default function ReservationDetails() {
             Contact Information
           </h3>
 
-          <div className="grid grid-cols-1 gap-4">
+          {/* Drop by Phone and Pickup by Phone - Side by Side */}
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Drop by Phone</p>
               <p className="text-base text-foreground">{reservationDetails.drop_by_phone || 'N/A'}</p>

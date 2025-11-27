@@ -195,8 +195,6 @@ export default function Reservation() {
               />
             </div>
 
-            
-
             <Button type="submit" disabled={loading} className="btn-qikpod w-full h-12">
               {loading ? 'Processing...' : 'Proceed'}
             </Button>
