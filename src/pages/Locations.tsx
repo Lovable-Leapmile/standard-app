@@ -69,20 +69,6 @@ export default function Locations() {
             </div>
           </div>
 
-          {/* User Info */}
-          <Card className="card-modern bg-gradient-primary p-4 text-white">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <span className="text-gray-800 font-bold text-sm">
-                  {user?.user_name?.charAt(0) || 'U'}
-                </span>
-              </div>
-              <div className="ml-3">
-                <p className="font-medium text-gray-800">{user?.user_name}</p>
-                <p className="text-sm text-gray-600">{user?.user_phone}</p>
-              </div>
-            </div>
-          </Card>
 
           {loading ? (
             <div className="space-y-3">

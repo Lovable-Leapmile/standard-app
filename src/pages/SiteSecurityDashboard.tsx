@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, UserPlus, Plus, User, Phone, Mail, Home, Package, AlertCircle } from "lucide-react";
+import { Search, UserPlus, Plus, User, Phone, Mail, Home, Package, AlertCircle, MapPin } from "lucide-react";
 import { PaginationFilter } from "@/components/PaginationFilter";
 import { getUserData, isLoggedIn } from "@/utils/storage";
 import { apiService } from "@/services/api";
@@ -382,8 +382,20 @@ export default function SiteSecurityDashboard() {
     );
   };
 
+  const currentLocationName = localStorage.getItem('current_location_name');
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Location Name Banner */}
+      {currentLocationName && (
+        <div className="bg-primary/10 border-b border-primary/20 py-2 px-4">
+          <div className="max-w-4xl mx-auto flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">{currentLocationName}</span>
+          </div>
+        </div>
+      )}
+
       <div className="p-4 max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>

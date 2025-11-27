@@ -58,7 +58,7 @@ export function Header({ title, showSettings = true }: HeaderProps) {
           {showSettings && (
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-qikpod-black hover:bg-black/10 h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" className="text-qikpod-black hover:bg-black/10 h-8 w-8 p-0 mr-[10px]">
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>

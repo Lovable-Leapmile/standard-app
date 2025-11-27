@@ -152,29 +152,26 @@ export default function Login() {
         return;
       }
 
-      // If no pod_id, check if user has a valid location
-      const needsLocationSelection = await checkUserLocation(userData.id);
-      if (needsLocationSelection) {
-        // Auto-assign first location if user has no location
-        try {
-          const locations = await apiService.getUserLocations(userData.id, 'updated_at', 'ASC');
-          if (locations.length > 0) {
-            const firstLocation = locations[0];
-            localStorage.setItem('current_location_id', firstLocation.location_id.toString());
-            localStorage.setItem('current_location_name', firstLocation.location_name);
-            console.log('Auto-assigned first location:', firstLocation.location_name);
-          } else {
-            // If still no locations, show selection popup
-            setUserData(userData);
-            setShowMandatoryLocationPopup(true);
-            return;
-          }
-        } catch (error) {
-          console.error('Error auto-assigning location:', error);
+      // If no pod_id, auto-select first location
+      try {
+        const locations = await apiService.getUserLocations(userData.id, 'updated_at', 'ASC');
+        if (locations.length > 0) {
+          const firstLocation = locations[0];
+          localStorage.setItem('current_location_id', firstLocation.location_id.toString());
+          localStorage.setItem('current_location_name', firstLocation.location_name);
+          console.log('Auto-assigned first location:', firstLocation.location_name);
+        } else {
+          // If no locations available, show selection popup
           setUserData(userData);
           setShowMandatoryLocationPopup(true);
           return;
         }
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+        // If API fails, show location selection popup
+        setUserData(userData);
+        setShowMandatoryLocationPopup(true);
+        return;
       }
       
       navigateToUserDashboard(userData);
