@@ -316,7 +316,7 @@ export default function Login() {
                     value={otp}
                     onChange={setOtp}
                     length={6}
-                    className="flex flex-wrap justify-center gap-2 w-full"
+                    className="flex flex-wrap justify-center gap-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl"
                   />
                 </div>
 
