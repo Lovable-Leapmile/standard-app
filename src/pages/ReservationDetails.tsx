@@ -206,7 +206,6 @@ export default function ReservationDetails() {
             <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 p-4 mb-4">
               <div className="text-center mb-3">
                 <h4 className="text-sm font-semibold text-black mb-1">🔐 Access Codes</h4>
-                <p className="text-xs text-muted-foreground">Use these OTPs when prompted</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
