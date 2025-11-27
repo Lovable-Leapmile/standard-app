@@ -133,7 +133,7 @@ export default function Reservation() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <Package className="w-6 h-6 text-gray-800 opacity-40" />
+                <Package className="w-5 h-5 text-gray-800 opacity-40" />
                 <h2 className="text-lg font-bold">{locationName}</h2>
               </div>
             </div>
