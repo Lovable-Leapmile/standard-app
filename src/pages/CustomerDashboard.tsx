@@ -377,7 +377,7 @@ export default function CustomerDashboard() {
                 {renderPagination(historyPage, getTotalPages(historyReservations), setHistoryPage)}
               </>
             ) : (
-              <div className="text-center py-12 text-muted-foreground"
+              <div className="text-center py-12 text-muted-foreground">
                 <Package className="w-5 h-5 text-gray-800 opacity-40" />
                 <p className="text-lg font-medium mb-2">No Reservations</p>
                 <p className="text-sm">There is No Reservation, Please Create Reservation</p>
