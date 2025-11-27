@@ -8,27 +8,39 @@ import { Package, Clock, MapPin } from "lucide-react";
 import { apiService, Reservation as APIReservation } from "@/services/api";
 import { getUserData, isLoggedIn, getPodName, getLocationId } from "@/utils/storage";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ReservationCard } from "@/components/ReservationCard";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { LocationDetectionPopup } from "@/components/LocationDetectionPopup";
 import { PaginationFilter } from "@/components/PaginationFilter";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
 const qikpodLogo = "https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png";
 export default function CustomerDashboard() {
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const user = getUserData();
   const [dropPendingReservations, setDropPendingReservations] = useState<APIReservation[]>([]);
   const [pickupPendingReservations, setPickupPendingReservations] = useState<APIReservation[]>([]);
   const [historyReservations, setHistoryReservations] = useState<APIReservation[]>([]);
-  const [historyFilter, setHistoryFilter] = useState<'PickupCompleted' | 'DropCancelled'>('PickupCompleted');
+  const [historyFilter, setHistoryFilter] = useState<"PickupCompleted" | "DropCancelled">("PickupCompleted");
   const [loading, setLoading] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [activeTab, setActiveTab] = useState('drop-pending');
+  const [activeTab, setActiveTab] = useState("drop-pending");
 
   // Pagination states
   const [dropPendingPage, setDropPendingPage] = useState(1);
@@ -38,18 +50,15 @@ export default function CustomerDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Location detection.
-  const currentLocationId = localStorage.getItem('current_location_id');
-  const {
-    showLocationPopup,
-    closeLocationPopup
-  } = useLocationDetection(user?.id, currentLocationId);
+  const currentLocationId = localStorage.getItem("current_location_id");
+  const { showLocationPopup, closeLocationPopup } = useLocationDetection(user?.id, currentLocationId);
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
-    if (user?.user_type !== 'Customer') {
-      navigate('/login');
+    if (user?.user_type !== "Customer") {
+      navigate("/login");
       return;
     }
     initializeData();
@@ -71,11 +80,11 @@ export default function CustomerDashboard() {
         // Finally load reservations
         loadReservations();
       } catch (error) {
-        console.error('Error initializing data:', error);
+        console.error("Error initializing data:", error);
         toast({
           title: "Error",
           description: "Failed to load initial data",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     } else {
@@ -86,11 +95,11 @@ export default function CustomerDashboard() {
     if (!user) return;
     setLoading(true);
     try {
-      const locationId = localStorage.getItem('current_location_id');
+      const locationId = localStorage.getItem("current_location_id");
 
       // Only proceed if we have a valid location_id
       if (!locationId) {
-        console.log('No location_id found, skipping reservations load');
+        console.log("No location_id found, skipping reservations load");
         setDropPendingReservations([]);
         setPickupPendingReservations([]);
         setHistoryReservations([]);
@@ -98,45 +107,50 @@ export default function CustomerDashboard() {
       }
 
       // Load all reservation types
-      const [dropPending, pickupPending, pickupCompleted, dropCancelled] = await Promise.all([apiService.getReservations(user.user_phone, locationId, 'DropPending'), apiService.getReservations(user.user_phone, locationId, 'PickupPending'), apiService.getReservations(user.user_phone, locationId, 'PickupCompleted'), apiService.getReservations(user.user_phone, locationId, 'DropCancelled')]);
+      const [dropPending, pickupPending, pickupCompleted, dropCancelled] = await Promise.all([
+        apiService.getReservations(user.user_phone, locationId, "DropPending"),
+        apiService.getReservations(user.user_phone, locationId, "PickupPending"),
+        apiService.getReservations(user.user_phone, locationId, "PickupCompleted"),
+        apiService.getReservations(user.user_phone, locationId, "DropCancelled"),
+      ]);
       setDropPendingReservations(dropPending);
       setPickupPendingReservations(pickupPending);
 
       // Set initial history based on current filter
-      setHistoryReservations(historyFilter === 'PickupCompleted' ? pickupCompleted : dropCancelled);
+      setHistoryReservations(historyFilter === "PickupCompleted" ? pickupCompleted : dropCancelled);
     } catch (error) {
-      console.error('Error loading reservations:', error);
+      console.error("Error loading reservations:", error);
       // Don't show toast for API errors - let the empty state handle it
     } finally {
       setLoading(false);
     }
   };
-  const handleHistoryFilterChange = async (filter: 'PickupCompleted' | 'DropCancelled') => {
+  const handleHistoryFilterChange = async (filter: "PickupCompleted" | "DropCancelled") => {
     setHistoryFilter(filter);
     if (!user) return;
     try {
-      const locationId = localStorage.getItem('current_location_id');
+      const locationId = localStorage.getItem("current_location_id");
 
       // Only proceed if we have a valid location_id
       if (!locationId) {
-        console.log('No location_id found, skipping history load');
+        console.log("No location_id found, skipping history load");
         setHistoryReservations([]);
         return;
       }
       const reservations = await apiService.getReservations(user.user_phone, locationId, filter);
       setHistoryReservations(reservations);
     } catch (error) {
-      console.error('Error loading history:', error);
+      console.error("Error loading history:", error);
       toast({
         title: "Error",
         description: "Failed to load history",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login');
+    navigate("/login");
   };
   const handleCreateReservation = async () => {
     const locationId = getLocationId();
@@ -144,7 +158,7 @@ export default function CustomerDashboard() {
       toast({
         title: "Error",
         description: "No location selected. Please select a location first.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -158,15 +172,15 @@ export default function CustomerDashboard() {
         toast({
           title: "No doors available",
           description: "No doors available at this location.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     } catch (error) {
-      console.error('Error checking door availability:', error);
+      console.error("Error checking door availability:", error);
       toast({
         title: "No doors available",
         description: "No doors available.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -176,7 +190,13 @@ export default function CustomerDashboard() {
     navigate(`/reservation-details/${reservation.id}`);
   };
   const renderReservationCard = (reservation: APIReservation) => {
-    return <ReservationCard key={reservation.id} reservation={reservation as any} onShowMore={() => handleShowMoreReservation(reservation)} />;
+    return (
+      <ReservationCard
+        key={reservation.id}
+        reservation={reservation as any}
+        onShowMore={() => handleShowMoreReservation(reservation)}
+      />
+    );
   };
 
   // Pagination helpers
@@ -190,47 +210,65 @@ export default function CustomerDashboard() {
   };
   const renderPagination = (currentPage: number, totalPages: number, onPageChange: (page: number) => void) => {
     if (totalPages <= 1) return null;
-    return <Pagination className="mt-4">
+    return (
+      <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious onClick={() => onPageChange(Math.max(1, currentPage - 1))} className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} />
+            <PaginationPrevious
+              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
           </PaginationItem>
-          
-          {Array.from({
-          length: totalPages
-        }, (_, i) => i + 1).map(page => <PaginationItem key={page}>
-              <PaginationLink onClick={() => onPageChange(page)} isActive={page === currentPage} className="cursor-pointer">
+
+          {Array.from(
+            {
+              length: totalPages,
+            },
+            (_, i) => i + 1,
+          ).map((page) => (
+            <PaginationItem key={page}>
+              <PaginationLink
+                onClick={() => onPageChange(page)}
+                isActive={page === currentPage}
+                className="cursor-pointer"
+              >
                 {page}
               </PaginationLink>
-            </PaginationItem>)}
-          
+            </PaginationItem>
+          ))}
+
           <PaginationItem>
-            <PaginationNext onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))} className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} />
+            <PaginationNext
+              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
           </PaginationItem>
         </PaginationContent>
-      </Pagination>;
+      </Pagination>
+    );
   };
   const getStatusVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
-      case 'DropPending':
-      case 'PickupPending':
-        return 'default';
-      case 'PickupCompleted':
-        return 'secondary';
-      case 'DropCancelled':
-        return 'destructive';
+      case "DropPending":
+      case "PickupPending":
+        return "default";
+      case "PickupCompleted":
+        return "secondary";
+      case "DropCancelled":
+        return "destructive";
       default:
-        return 'outline';
+        return "outline";
     }
   };
-  const currentLocationName = localStorage.getItem('current_location_name');
+  const currentLocationName = localStorage.getItem("current_location_name");
 
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       {/* Location Name Banner */}
       {currentLocationName && (
         <div className="bg-primary/10 border-b border-primary/20 py-2 px-4">
           <div className="max-w-md mx-auto flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
+            <MapPin className="w-5 h-5 text-gray-800 opacity-40" />
             <span className="text-sm font-medium text-foreground">{currentLocationName}</span>
           </div>
         </div>
@@ -251,11 +289,11 @@ export default function CustomerDashboard() {
             <TabsTrigger value="pickup-pending">Pickup Pending</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
-          
+
           {/* Search and Filter Bar */}
           <div className="mt-4 mb-6">
-            <PaginationFilter 
-              itemsPerPage={itemsPerPage} 
+            <PaginationFilter
+              itemsPerPage={itemsPerPage}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
               onItemsPerPageChange={(value) => {
@@ -274,51 +312,77 @@ export default function CustomerDashboard() {
           </div>
 
           <TabsContent value="drop-pending" className="space-y-4 mt-6">
-            {loading ? <div className="text-center py-8">Loading...</div> : dropPendingReservations.length > 0 ? <>
+            {loading ? (
+              <div className="text-center py-8">Loading...</div>
+            ) : dropPendingReservations.length > 0 ? (
+              <>
                 <div className="space-y-4">
                   {paginateReservations(dropPendingReservations, dropPendingPage).map(renderReservationCard)}
                 </div>
                 {renderPagination(dropPendingPage, getTotalPages(dropPendingReservations), setDropPendingPage)}
-              </> : <div className="text-center py-12 text-muted-foreground">
+              </>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
                 <Package className="mx-auto h-12 w-12 mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">No Reservations</p>
                 <p className="text-sm">There is No Reservation, Please Create Reservation</p>
-              </div>}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="pickup-pending" className="space-y-4 mt-6">
-            {loading ? <div className="text-center py-8">Loading...</div> : pickupPendingReservations.length > 0 ? <>
+            {loading ? (
+              <div className="text-center py-8">Loading...</div>
+            ) : pickupPendingReservations.length > 0 ? (
+              <>
                 <div className="space-y-4">
                   {paginateReservations(pickupPendingReservations, pickupPendingPage).map(renderReservationCard)}
                 </div>
                 {renderPagination(pickupPendingPage, getTotalPages(pickupPendingReservations), setPickupPendingPage)}
-              </> : <div className="text-center py-12 text-muted-foreground">
+              </>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
                 <Clock className="mx-auto h-12 w-12 mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">No Reservations</p>
                 <p className="text-sm">There is No Reservation, Please Create Reservation</p>
-              </div>}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="history" className="space-y-4 mt-6">
             <div className="grid grid-cols-2 gap-2 mb-4">
-              <Button variant={historyFilter === 'PickupCompleted' ? 'default' : 'outline'} className="h-12 text-sm" onClick={() => handleHistoryFilterChange('PickupCompleted')}>
+              <Button
+                variant={historyFilter === "PickupCompleted" ? "default" : "outline"}
+                className="h-12 text-sm"
+                onClick={() => handleHistoryFilterChange("PickupCompleted")}
+              >
                 Pickup Completed
               </Button>
-              <Button variant={historyFilter === 'DropCancelled' ? 'default' : 'outline'} className="h-12 text-sm" onClick={() => handleHistoryFilterChange('DropCancelled')}>
+              <Button
+                variant={historyFilter === "DropCancelled" ? "default" : "outline"}
+                className="h-12 text-sm"
+                onClick={() => handleHistoryFilterChange("DropCancelled")}
+              >
                 Drop Cancelled
               </Button>
             </div>
-            
-            {loading ? <div className="text-center py-8">Loading...</div> : historyReservations.length > 0 ? <>
+
+            {loading ? (
+              <div className="text-center py-8">Loading...</div>
+            ) : historyReservations.length > 0 ? (
+              <>
                 <div className="space-y-4">
                   {paginateReservations(historyReservations, historyPage).map(renderReservationCard)}
                 </div>
                 {renderPagination(historyPage, getTotalPages(historyReservations), setHistoryPage)}
-              </> : <div className="text-center py-12 text-muted-foreground">
+              </>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
                 <Package className="mx-auto h-12 w-12 mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">No Reservations</p>
                 <p className="text-sm">There is No Reservation, Please Create Reservation</p>
-              </div>}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
@@ -328,9 +392,7 @@ export default function CustomerDashboard() {
         <DialogContent className="max-w-sm mx-auto">
           <DialogHeader>
             <DialogTitle>Are you sure you want to logout?</DialogTitle>
-            <DialogDescription>
-              You will need to sign in again to access your account.
-            </DialogDescription>
+            <DialogDescription>You will need to sign in again to access your account.</DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex space-x-2">
             <Button variant="outline" onClick={() => setShowLogoutDialog(false)} className="flex-1">
@@ -344,6 +406,12 @@ export default function CustomerDashboard() {
       </Dialog>
 
       {/* Location Detection Popup */}
-      <LocationDetectionPopup isOpen={showLocationPopup} onClose={closeLocationPopup} userId={user?.id || 0} locationId={currentLocationId || ""} />
-    </div>;
+      <LocationDetectionPopup
+        isOpen={showLocationPopup}
+        onClose={closeLocationPopup}
+        userId={user?.id || 0}
+        locationId={currentLocationId || ""}
+      />
+    </div>
+  );
 }
