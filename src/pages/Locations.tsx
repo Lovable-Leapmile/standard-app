@@ -96,7 +96,7 @@ export default function Locations() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-                          <MapPin className="w-5 h-5 text-primary text-gray-800 opacity-40" />
+                          <MapPin className="w-5 h-5 text-gray-800 opacity-40" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-foreground truncate">{location.location_name}</h3>
