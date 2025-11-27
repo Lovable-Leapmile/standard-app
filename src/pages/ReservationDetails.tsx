@@ -295,7 +295,8 @@ export default function ReservationDetails() {
             onClick={handleResendDropOTP}
             disabled={!canResendDropOTP || actionLoading}
             variant="outline"
-            className="w-full h-12 flex items-center justify-center space-x-2"
+            {/* className="w-full h-12 flex items-center justify-center space-x-2" */}
+            className="w-full h-12 flex items-center justify-center space-x-2 border-gray-600"
           >
             <RotateCcw className={`w-4 h-4 ${actionLoading ? "animate-spin" : ""}`} />
             <span>Re-send Drop OTP</span>
