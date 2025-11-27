@@ -240,7 +240,7 @@ export default function ReservationDetails() {
         {/* Contact Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Phone className="w-5 h-5 text-gray-800 opacity-40" />
+            <Phone className="w-5 h-5 text-gray-800 opacity-40 mr-2" />
             Contact Information
           </h3>
 
@@ -261,7 +261,7 @@ export default function ReservationDetails() {
         {/* Timing Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Calendar className="w-5 h-5 text-gray-800 opacity-40" />
+            <Calendar className="w-5 h-5 text-gray-800 opacity-40 mr-2" />
             Timing Information
           </h3>
 
