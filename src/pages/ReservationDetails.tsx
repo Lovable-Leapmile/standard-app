@@ -184,7 +184,7 @@ export default function ReservationDetails() {
               onClick={() => navigate("/customer-dashboard")}
               className="h-8 w-8 p-0 text-qikpod-black hover:bg-black/10 flex-shrink-0"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-5 h-4" />
             </Button>
             <div className="flex items-center space-x-3">
               <Package className="w-5 h-5 text-gray-800 opacity-40" />
@@ -198,7 +198,7 @@ export default function ReservationDetails() {
         {/* Location & Basic Info */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-gray-800 opacity-40" />
+            <MapPin className="w-4 h-4 text-gray-800 opacity-40" />
             <p className="text-base text-foreground">{reservationDetails.location_name || "N/A"}</p>
           </h3>
           <div className="space-y-4">
@@ -239,8 +239,8 @@ export default function ReservationDetails() {
 
         {/* Contact Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Phone className="w-4 h-4 text-gray-800 opacity-40 mr-2" />
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Phone className="w-4 h-4 text-gray-800 opacity-40" />
             Contact Information
           </h3>
 
@@ -260,8 +260,8 @@ export default function ReservationDetails() {
 
         {/* Timing Details */}
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
-          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-            <Calendar className="w-4 h-4 text-gray-800 opacity-40 mr-2" />
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-gray-800 opacity-40" />
             Timing Information
           </h3>
 
