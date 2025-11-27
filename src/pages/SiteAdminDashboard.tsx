@@ -431,7 +431,7 @@ export default function SiteAdminDashboard() {
           <TabsContent value="users" className="space-y-4">
             {currentUsers.length === 0 ? (
               <div className="text-center py-20">
-                <User className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+                <User className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-40" />
                 <p className="text-muted-foreground">
                   {searchQuery ? "No users found matching your search." : "No users found for this location."}
                 </p>
@@ -447,7 +447,7 @@ export default function SiteAdminDashboard() {
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-                          <User className="w-5 h-5 text-primary" />
+                          <User className="w-5 h-5 text-gray-800 opacity-40" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-foreground truncate">{locationUser.user_name}</h3>
