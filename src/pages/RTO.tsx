@@ -73,9 +73,7 @@ export default function RTO() {
       }
 
       // Filter for RTOPending status only
-      const rtoPendingOnly = reservationsArray.filter(
-        (item: any) => item.reservation_status === "RTOPending"
-      );
+      const rtoPendingOnly = reservationsArray.filter((item: any) => item.reservation_status === "RTOPending");
 
       const transformedReservations = rtoPendingOnly.map((item: any) => ({
         id: item.id || "",
