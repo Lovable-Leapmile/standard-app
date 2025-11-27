@@ -9,7 +9,14 @@ import { User, Phone, Mail, MapPin, Home, Edit2, X, Check, RefreshCw, ArrowLeft,
 import { getUserData, isLoggedIn, setUserData } from "@/utils/storage";
 import { apiService } from "@/services/api";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { maskPhoneNumber } from "@/utils/phoneUtils";
 
 interface UserShape {
@@ -35,8 +42,8 @@ interface ProfileForm {
 export default function Profile() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const userId = searchParams.get('user_id');
-  const isAdminView = searchParams.get('admin_view') === 'true';
+  const userId = searchParams.get("user_id");
+  const isAdminView = searchParams.get("admin_view") === "true";
   const [user, setUser] = useState<UserShape | null>(() => getUserData());
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +53,7 @@ export default function Profile() {
     user_name: "",
     user_email: "",
     user_flatno: "",
-    user_address: ""
+    user_address: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof ProfileForm, string>>>({});
   const firstInputRef = useRef<HTMLInputElement | null>(null);
@@ -88,7 +95,7 @@ export default function Profile() {
         user_name: user.user_name || "",
         user_email: user.user_email || "",
         user_flatno: user.user_flatno || "",
-        user_address: user.user_address || ""
+        user_address: user.user_address || "",
       });
       setErrors({});
     }
@@ -110,53 +117,69 @@ export default function Profile() {
     return Math.max(0, Math.floor(diff));
   }, [user.user_credit_limit, user.user_credit_used]);
 
-  const profileItems = [{
-    icon: User,
-    label: "Name",
-    field: "user_name",
-    value: user.user_name || "—",
-    editable: true
-  }, {
-    icon: Phone,
-    label: "Phone Number",
-    field: "user_phone",
-    value: user.user_phone ? isAdminView && getUserData()?.user_type === 'SiteSecurity' ? maskPhoneNumber(user.user_phone) : user.user_phone : "—",
-    editable: false
-  }, {
-    icon: Mail,
-    label: "Email",
-    field: "user_email",
-    value: user.user_email || "Not provided",
-    editable: true
-  }, {
-    icon: Home,
-    label: "Flat Number",
-    field: "user_flatno",
-    value: user.user_flatno || "Not specified",
-    editable: true
-  }, {
-    icon: MapPin,
-    label: "Address",
-    field: "user_address",
-    value: user.user_address || "Not provided",
-    editable: true
-  }] as const;
+  const profileItems = [
+    {
+      icon: User,
+      label: "Name",
+      field: "user_name",
+      value: user.user_name || "—",
+      editable: true,
+    },
+    {
+      icon: Phone,
+      label: "Phone Number",
+      field: "user_phone",
+      value: user.user_phone
+        ? isAdminView && getUserData()?.user_type === "SiteSecurity"
+          ? maskPhoneNumber(user.user_phone)
+          : user.user_phone
+        : "—",
+      editable: false,
+    },
+    {
+      icon: Mail,
+      label: "Email",
+      field: "user_email",
+      value: user.user_email || "Not provided",
+      editable: true,
+    },
+    {
+      icon: Home,
+      label: "Flat Number",
+      field: "user_flatno",
+      value: user.user_flatno || "Not specified",
+      editable: true,
+    },
+    {
+      icon: MapPin,
+      label: "Address",
+      field: "user_address",
+      value: user.user_address || "Not provided",
+      editable: true,
+    },
+  ] as const;
 
   const clean = (s: string) => s.trim();
-  const isValidEmail = (s: string) => !s || /^(?:[a-zA-Z0-9_!#$%&'*+\/=?`{|}~^.-]+)@(?:[a-zA-Z0-9.-]+)\.[a-zA-Z]{2,}$/.test(s);
+  const isValidEmail = (s: string) =>
+    !s || /^(?:[a-zA-Z0-9_!#$%&'*+\/=?`{|}~^.-]+)@(?:[a-zA-Z0-9.-]+)\.[a-zA-Z]{2,}$/.test(s);
 
-  const original: ProfileForm = useMemo(() => ({
-    user_name: user.user_name || "",
-    user_email: user.user_email || "",
-    user_flatno: user.user_flatno || "",
-    user_address: user.user_address || ""
-  }), [user]);
+  const original: ProfileForm = useMemo(
+    () => ({
+      user_name: user.user_name || "",
+      user_email: user.user_email || "",
+      user_flatno: user.user_flatno || "",
+      user_address: user.user_address || "",
+    }),
+    [user],
+  );
 
   const hasChanges = useMemo(() => {
-    return clean(formData.user_name) !== clean(original.user_name) ||
-           clean(formData.user_email) !== clean(original.user_email) ||
-           clean(formData.user_flatno) !== clean(original.user_flatno) ||
-           clean(formData.user_address) !== clean(original.user_address);
+    return (
+      clean(formData.user_name) !== clean(original.user_name) ||
+      clean(formData.user_email) !== clean(original.user_email) ||
+      clean(formData.user_flatno) !== clean(original.user_flatno) ||
+      clean(formData.user_address) !== clean(original.user_address)
+    );
   }, [formData, original]);
 
   const validate = (draft: ProfileForm) => {
@@ -171,7 +194,7 @@ export default function Profile() {
       user_name: clean(formData.user_name),
       user_email: clean(formData.user_email),
       user_flatno: clean(formData.user_flatno),
-      user_address: clean(formData.user_address)
+      user_address: clean(formData.user_address),
     };
 
     const nextErrors = validate(payload);
@@ -192,7 +215,7 @@ export default function Profile() {
       await apiService.updateUser(Number(user.id), payload);
       const updatedUser: UserShape = {
         ...user,
-        ...payload
+        ...payload,
       };
       setUser(updatedUser);
       setUserData(updatedUser as any);
@@ -224,7 +247,7 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     if (!user?.id) return;
 
-    const currentLocationId = localStorage.getItem('current_location_id');
+    const currentLocationId = localStorage.getItem("current_location_id");
     if (!currentLocationId) {
       toast.error("Location information not found");
       return;
@@ -253,7 +276,7 @@ export default function Profile() {
   };
 
   const currentUser = getUserData();
-  const canDeleteUser = isAdminView && currentUser?.user_type === 'SiteAdmin';
+  const canDeleteUser = isAdminView && currentUser?.user_type === "SiteAdmin";
 
   useEffect(() => {
     const beforeUnload = (e: BeforeUnloadEvent) => {
@@ -281,16 +304,23 @@ export default function Profile() {
         <Card className="card-modern bg-gradient-primary p-4 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="h-8 w-8 p-0 bg-white/20 text-gray-800 hover:bg-white/30">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate(-1)}
+                className="h-8 w-8 p-0 bg-white/20 text-gray-800 hover:bg-white/30"
+              >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div>
-                <h1 className="text-xl font-bold text-gray-800">{user.user_name}</h1>
-                <p className="opacity-90 text-gray-600 text-sm">{user.user_type}</p>
-              </div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Personal Information</h2>
             </div>
             {!isAdminView && (
-              <Button variant="secondary" size="icon" onClick={() => setIsEditing(true)} className="bg-white/20 hover:bg-white/30 border-0 text-gray-800">
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => setIsEditing(true)}
+                className="bg-white/20 hover:bg-white/30 border-0 text-gray-800"
+              >
                 <Edit2 className="w-4 h-4" />
               </Button>
             )}
@@ -299,9 +329,8 @@ export default function Profile() {
 
         {/* Profile Details */}
         <div className="bg-secondary rounded-xl p-4">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Personal Information</h2>
           <div className="space-y-3">
-            {profileItems.map(item => (
+            {profileItems.map((item) => (
               <Card key={item.label} className="card-modern p-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -325,7 +354,11 @@ export default function Profile() {
                 <h3 className="font-semibold text-destructive">Remove the User from this Location</h3>
                 <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
               </div>
-              <Button variant="outline" onClick={() => setShowDeleteDialog(true)} className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+              <Button
+                variant="outline"
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+              >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Remove User
               </Button>
@@ -346,64 +379,88 @@ export default function Profile() {
 
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name" className="mb-2">Name</Label>
+                  <Label htmlFor="name" className="mb-2">
+                    Name
+                  </Label>
                   <Input
                     id="name"
                     ref={firstInputRef}
                     value={formData.user_name}
-                    onChange={e => setFormData(prev => ({
-                      ...prev,
-                      user_name: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        user_name: e.target.value,
+                      }))
+                    }
                     placeholder="Enter your name"
                     disabled={isLoading}
                     aria-invalid={!!errors.user_name}
                     aria-describedby={errors.user_name ? "name-error" : undefined}
                   />
-                  {errors.user_name && <p id="name-error" className="mt-1 text-sm text-red-600">{errors.user_name}</p>}
+                  {errors.user_name && (
+                    <p id="name-error" className="mt-1 text-sm text-red-600">
+                      {errors.user_name}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <Label htmlFor="email" className="mb-2">Email</Label>
+                  <Label htmlFor="email" className="mb-2">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.user_email}
-                    onChange={e => setFormData(prev => ({
-                      ...prev,
-                      user_email: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        user_email: e.target.value,
+                      }))
+                    }
                     placeholder="Enter your email"
                     disabled={isLoading}
                     aria-invalid={!!errors.user_email}
                     aria-describedby={errors.user_email ? "email-error" : undefined}
                   />
-                  {errors.user_email && <p id="email-error" className="mt-1 text-sm text-red-600">{errors.user_email}</p>}
+                  {errors.user_email && (
+                    <p id="email-error" className="mt-1 text-sm text-red-600">
+                      {errors.user_email}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <Label htmlFor="flatno" className="mb-2">Flat Number</Label>
+                  <Label htmlFor="flatno" className="mb-2">
+                    Flat Number
+                  </Label>
                   <Input
                     id="flatno"
                     value={formData.user_flatno}
-                    onChange={e => setFormData(prev => ({
-                      ...prev,
-                      user_flatno: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        user_flatno: e.target.value,
+                      }))
+                    }
                     placeholder="Enter your flat number"
                     disabled={isLoading}
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="address" className="mb-2">Address</Label>
+                  <Label htmlFor="address" className="mb-2">
+                    Address
+                  </Label>
                   <Textarea
                     id="address"
                     value={formData.user_address}
-                    onChange={e => setFormData(prev => ({
-                      ...prev,
-                      user_address: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        user_address: e.target.value,
+                      }))
+                    }
                     placeholder="Enter your address"
                     rows={3}
                     disabled={isLoading}
@@ -411,10 +468,18 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <Label htmlFor="phone" className="mb-2">Phone Number</Label>
+                  <Label htmlFor="phone" className="mb-2">
+                    Phone Number
+                  </Label>
                   <Input
                     id="phone"
-                    value={user.user_phone ? isAdminView && getUserData()?.user_type === 'SiteSecurity' ? maskPhoneNumber(user.user_phone) : user.user_phone : "—"}
+                    value={
+                      user.user_phone
+                        ? isAdminView && getUserData()?.user_type === "SiteSecurity"
+                          ? maskPhoneNumber(user.user_phone)
+                          : user.user_phone
+                        : "—"
+                    }
                     readOnly
                     disabled
                   />
@@ -423,7 +488,11 @@ export default function Profile() {
 
               {/* Responsive button container */}
               <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                <Button onClick={handleSave} disabled={isLoading || !hasChanges} className="flex-1 bg-primary hover:bg-primary/90">
+                <Button
+                  onClick={handleSave}
+                  disabled={isLoading || !hasChanges}
+                  className="flex-1 bg-primary hover:bg-primary/90"
+                >
                   {isLoading ? (
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -436,7 +505,13 @@ export default function Profile() {
                     </>
                   )}
                 </Button>
-                <Button type="button" variant="outline" onClick={handleResetToOriginal} disabled={isLoading || !hasChanges} className="flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetToOriginal}
+                  disabled={isLoading || !hasChanges}
+                  className="flex-1"
+                >
                   <RefreshCw className="w-4 h-4 mr-2" /> Reset
                 </Button>
                 <Button variant="secondary" onClick={handleCancel} disabled={isLoading} className="flex-1">
@@ -460,7 +535,12 @@ export default function Profile() {
               <Button variant="outline" onClick={() => setShowDeleteDialog(false)} disabled={isLoading}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={handleDeleteUser} disabled={isLoading} className="flex items-center gap-2">
+              <Button
+                variant="destructive"
+                onClick={handleDeleteUser}
+                disabled={isLoading}
+                className="flex items-center gap-2"
+              >
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
