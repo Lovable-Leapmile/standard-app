@@ -199,7 +199,6 @@ export default function ReservationDetails() {
         <Card className="card-3d bg-card/80 backdrop-blur-sm p-6 animate-slide-up">
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
             <MapPin className="w-5 h-5 mr-2 text-primary" />
-            Location & Details
             <p className="text-base text-foreground">{reservationDetails.location_name || "N/A"}</p>
           </h3>
           <div className="space-y-4">
