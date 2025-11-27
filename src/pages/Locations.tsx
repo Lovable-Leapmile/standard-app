@@ -16,7 +16,7 @@ export default function Locations() {
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
     loadUserLocations();
@@ -30,11 +30,11 @@ export default function Locations() {
       const userLocations = await apiService.getUserLocations(user.id);
       setLocations(userLocations);
     } catch (error) {
-      console.error('Error loading user locations:', error);
+      console.error("Error loading user locations:", error);
       toast({
         title: "Error",
         description: "Failed to load your locations",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -44,7 +44,7 @@ export default function Locations() {
   const handleLocationSelect = (location: UserLocation) => {
     saveLastLocation(location.location_name);
     saveLocationId(location.location_id.toString());
-    navigate('/customer-dashboard');
+    navigate("/customer-dashboard");
   };
 
   const user = getUserData();
@@ -59,20 +59,12 @@ export default function Locations() {
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="h-8 w-8 p-0">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                Select Location
-              </h1>
-              <p className="text-muted-foreground">
-                Choose from your saved locations to access lockers
-              </p>
-            </div>
+            <h1 className="text-2xl font-bold text-foreground h-4">Select Location</h1>
           </div>
-
 
           {loading ? (
             <div className="space-y-3">
-              {[1, 2, 3].map(i => (
+              {[1, 2, 3].map((i) => (
                 <Card key={i} className="p-4 animate-pulse">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-muted rounded-full"></div>
@@ -95,8 +87,12 @@ export default function Locations() {
           ) : (
             <div className="bg-secondary rounded-xl p-4 my-[10px]">
               <div className="space-y-3">
-                {locations.map(location => (
-                  <Card key={location.id} className="card-modern p-4 cursor-pointer hover:shadow-md transition-all" onClick={() => handleLocationSelect(location)}>
+                {locations.map((location) => (
+                  <Card
+                    key={location.id}
+                    className="card-modern p-4 cursor-pointer hover:shadow-md transition-all"
+                    onClick={() => handleLocationSelect(location)}
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
@@ -107,11 +103,11 @@ export default function Locations() {
                           <p className="text-sm text-muted-foreground line-clamp-2">{location.location_address}</p>
                           <div className="flex items-center space-x-4 mt-1">
                             <span className="text-xs text-muted-foreground">PIN: {location.location_pincode}</span>
-                            <span className={`text-xs font-medium ${
-                              location.status.toLowerCase() === 'active'
-                                ? 'text-green-600'
-                                : 'text-muted-foreground'
-                            }`}>
+                            <span
+                              className={`text-xs font-medium ${
+                                location.status.toLowerCase() === "active" ? "text-green-600" : "text-muted-foreground"
+                              }`}
+                            >
                               {location.status.toUpperCase()}
                             </span>
                           </div>
