@@ -96,20 +96,13 @@ export default function Locations() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-                          <MapPin className="w-5 h-5 text-primary" />
+                          <MapPin className="w-5 h-5 text-primary text-gray-800 opacity-40" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-foreground truncate">{location.location_name}</h3>
                           <p className="text-sm text-muted-foreground line-clamp-2">{location.location_address}</p>
                           <div className="flex items-center space-x-4 mt-1">
-                            <span className="text-xs text-muted-foreground">PIN: {location.location_pincode}</span>
-                            <span
-                              className={`text-xs font-medium ${
-                                location.status.toLowerCase() === "active" ? "text-green-600" : "text-muted-foreground"
-                              }`}
-                            >
-                              {location.status.toUpperCase()}
-                            </span>
+                            <span className="text-xs text-muted-foreground">PINCODE: {location.location_pincode}</span>
                           </div>
                         </div>
                       </div>
