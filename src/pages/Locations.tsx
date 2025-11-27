@@ -59,7 +59,7 @@ export default function Locations() {
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="h-8 w-8 p-0">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground h-4">Select Location</h1>
+            <h1 className="text-2xl font-bold text-foreground">Select Location</h1>
           </div>
 
           {loading ? (
