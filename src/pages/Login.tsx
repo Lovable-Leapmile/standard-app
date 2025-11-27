@@ -258,7 +258,7 @@ export default function Login() {
                       autoFocus
                     />
                   </div>
-                  <p className="text-sm font-medium text-gray-400 mb-2 block">
+                  <p className="text-sm font-medium text-gray-400 mt-3 mb-2 block">
                     By clicking the Continue with OTP you acknowledge and accept the application Terms & Conditions
                   </p>
                 </div>
