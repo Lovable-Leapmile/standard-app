@@ -312,7 +312,7 @@ export default function Profile() {
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <h2 className="text-lg font-semibold text-foreground mb-4">Personal Information</h2>
+              <h2 className="text-lg font-semibold text-foreground mt-2 mb-4">Personal Information</h2>
             </div>
             {!isAdminView && (
               <Button
