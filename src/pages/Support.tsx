@@ -211,12 +211,7 @@ export default function Support() {
             
             <div>
               <p className="font-medium text-foreground mb-1">What if my package is damaged?</p>
-              <p className="text-muted-foreground">Report damaged packages immediately through this support form with photos.</p>
-            </div>
-            
-            <div>
-              <p className="font-medium text-foreground mb-1">How long can I store items?</p>
-              <p className="text-muted-foreground">Standard storage is 48 hours. Extended storage may incur additional charges.</p>
+              <p className="text-muted-foreground">Report damaged packages immediately through support form or inform the site security.</p>
             </div>
           </div>
         </Card>
