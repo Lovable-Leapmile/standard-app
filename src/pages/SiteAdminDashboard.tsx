@@ -530,7 +530,7 @@ export default function SiteAdminDashboard() {
 
       {/* Add User Dialog */}
       <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent className="min-w-[300px] max-w-[480px] mx-auto max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Add New User</DialogTitle>
             <DialogDescription>Create a new user account for this location.</DialogDescription>
@@ -637,7 +637,7 @@ export default function SiteAdminDashboard() {
       {/* User Selection Dialog for Create Reservation */}
       <Dialog open={showUserSelectionDialog} onOpenChange={setShowUserSelectionDialog}>
         <DialogContent
-          className="max-w-2xl max-h-[80vh] overflow-hidden p-6"
+          className="min-w-[300px] max-w-[480px] mx-auto max-h-[80vh] overflow-hidden p-6"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <DialogHeader>
@@ -694,7 +694,7 @@ export default function SiteAdminDashboard() {
 
       {/* Confirm User Dialog */}
       <Dialog open={showConfirmUserDialog} onOpenChange={setShowConfirmUserDialog}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
           <DialogHeader>
             <DialogTitle>Confirm User Selection</DialogTitle>
             <DialogDescription>Create a reservation for this user?</DialogDescription>
@@ -728,7 +728,7 @@ export default function SiteAdminDashboard() {
 
       {/* Remove User Confirmation Dialog */}
       <Dialog open={showRemoveUserDialog} onOpenChange={setShowRemoveUserDialog}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
           <DialogHeader>
             <DialogTitle>Remove User</DialogTitle>
             <DialogDescription>

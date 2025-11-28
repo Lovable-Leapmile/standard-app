@@ -389,7 +389,7 @@ export default function CustomerDashboard() {
 
       {/* Logout Confirmation Dialog */}
       <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-        <DialogContent className="max-w-sm mx-auto">
+        <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
           <DialogHeader>
             <DialogTitle>Are you sure you want to logout?</DialogTitle>
             <DialogDescription>You will need to sign in again to access your account.</DialogDescription>

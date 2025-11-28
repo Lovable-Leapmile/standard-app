@@ -30,7 +30,7 @@ export function LocationDetectionPopup({ isOpen, onClose, userId, locationId }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm mx-auto">
+      <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
         <DialogHeader>
           <div className="flex items-center gap-2 mb-2">
             <MapPin className="h-5 w-5 text-primary" />
