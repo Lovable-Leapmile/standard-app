@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -79,21 +86,21 @@ export default function SiteSecurityDashboard() {
     user_email: "",
     user_phone: "",
     user_address: "",
-    user_flatno: ""
+    user_flatno: "",
   });
 
   // Location detection
-  const currentLocationId = localStorage.getItem('current_location_id');
+  const currentLocationId = localStorage.getItem("current_location_id");
   const { showLocationPopup, closeLocationPopup } = useLocationDetection(user?.id, currentLocationId);
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
-    if (user?.user_type !== 'SiteSecurity') {
-      navigate('/login');
+    if (user?.user_type !== "SiteSecurity") {
+      navigate("/login");
       return;
     }
 
@@ -158,11 +165,11 @@ export default function SiteSecurityDashboard() {
 
       if (reservationList && Array.isArray(reservationList)) {
         // Map the data to ensure proper field names
-        const mappedReservations = reservationList.map(reservation => ({
+        const mappedReservations = reservationList.map((reservation) => ({
           ...reservation,
           user_name: reservation.user_name || reservation.created_by_name || "Unknown User",
           awb_number: reservation.awb_number || reservation.reservation_awbno || "N/A",
-          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A"
+          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A",
         }));
         setReservations(mappedReservations);
         setError(null);
@@ -189,11 +196,11 @@ export default function SiteSecurityDashboard() {
 
       if (historyList && Array.isArray(historyList)) {
         // Map the data to ensure proper field names
-        const mappedHistory = historyList.map(reservation => ({
+        const mappedHistory = historyList.map((reservation) => ({
           ...reservation,
           user_name: reservation.user_name || reservation.created_by_name || "Unknown User",
           awb_number: reservation.awb_number || reservation.reservation_awbno || "N/A",
-          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A"
+          user_phone: reservation.user_phone || reservation.created_by_phone || "N/A",
         }));
         setReservations(mappedHistory);
         setError(null);
@@ -234,7 +241,7 @@ export default function SiteSecurityDashboard() {
         user_email: "",
         user_phone: "",
         user_address: "",
-        user_flatno: ""
+        user_flatno: "",
       });
       if (activeTab === "users") {
         await loadLocationUsers();
@@ -268,7 +275,7 @@ export default function SiteSecurityDashboard() {
     try {
       // Check for free door first
       const freeDoorResponse = await apiService.checkFreeDoor(currentLocationId);
-      
+
       if (!freeDoorResponse || !freeDoorResponse.records || freeDoorResponse.records.length === 0) {
         toast.error("No free doors available at this location");
         setIsLoading(false);
@@ -293,20 +300,25 @@ export default function SiteSecurityDashboard() {
     navigate(`/reservation-details/${reservation.id}`);
   };
 
-  const filteredUsers = Array.isArray(locationUsers) ? locationUsers.filter(user =>
-    user.user_type === "Customer" && (
-      user.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.user_phone.includes(searchQuery) ||
-      user.user_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.user_flatno.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  ) : [];
+  const filteredUsers = Array.isArray(locationUsers)
+    ? locationUsers.filter(
+        (user) =>
+          user.user_type === "Customer" &&
+          (user.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.user_phone.includes(searchQuery) ||
+            user.user_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.user_flatno.toLowerCase().includes(searchQuery.toLowerCase())),
+      )
+    : [];
 
-  const filteredReservations = Array.isArray(reservations) ? reservations.filter(reservation =>
-    reservation.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    reservation.user_phone.includes(searchQuery) ||
-    reservation.awb_number.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : [];
+  const filteredReservations = Array.isArray(reservations)
+    ? reservations.filter(
+        (reservation) =>
+          reservation.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          reservation.user_phone.includes(searchQuery) ||
+          reservation.awb_number.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    : [];
 
   // Pagination calculations for users
   const totalUsers = filteredUsers.length;
@@ -325,7 +337,10 @@ export default function SiteSecurityDashboard() {
   if (!user) return null;
 
   // Reservation List Component with phone masking
-  const ReservationList = ({ reservations, onReservationClick }: {
+  const ReservationList = ({
+    reservations,
+    onReservationClick,
+  }: {
     reservations: Reservation[];
     onReservationClick: (reservation: Reservation) => void;
   }) => {
@@ -355,7 +370,7 @@ export default function SiteSecurityDashboard() {
                   {reservation.reservation_status}
                 </span>
               </div>
-              
+
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Phone className="w-3 h-3" />
@@ -371,9 +386,7 @@ export default function SiteSecurityDashboard() {
                     <span>Pod: {reservation.pod_name}</span>
                   </div>
                 )}
-                <div className="text-xs">
-                  Created: {new Date(reservation.created_at).toLocaleString()}
-                </div>
+                <div className="text-xs">Created: {new Date(reservation.created_at).toLocaleString()}</div>
               </div>
             </div>
           </Card>
@@ -382,7 +395,7 @@ export default function SiteSecurityDashboard() {
     );
   };
 
-  const currentLocationName = localStorage.getItem('current_location_name');
+  const currentLocationName = localStorage.getItem("current_location_name");
 
   return (
     <div className="min-h-screen bg-background">
@@ -399,9 +412,7 @@ export default function SiteSecurityDashboard() {
       <div className="p-4 max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Site Security Dashboard
-          </h1>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Site Security Dashboard</h1>
           <p className="text-muted-foreground">Manage users, reservations, and location operations</p>
         </div>
 
@@ -412,12 +423,7 @@ export default function SiteSecurityDashboard() {
               <AlertCircle className="w-5 h-5" />
               <span>{error}</span>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-2"
-              onClick={loadData}
-            >
+            <Button variant="outline" size="sm" className="mt-2" onClick={loadData}>
               Retry
             </Button>
           </div>
@@ -433,17 +439,14 @@ export default function SiteSecurityDashboard() {
         {/* Top Action Buttons */}
         {!isLoading && (
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <Button
-              onClick={() => setShowAddUserDialog(true)}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={() => setShowAddUserDialog(true)} className="flex items-center gap-2">
               <UserPlus className="w-4 h-4" />
               Add User
             </Button>
             <Button
               variant="outline"
               onClick={handleOpenUserSelectionDialog}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 border-gray-200"
             >
               <Plus className="w-4 h-4" />
               Create Reservation
@@ -467,17 +470,9 @@ export default function SiteSecurityDashboard() {
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
               currentPage={currentPage}
-              totalPages={
-                activeTab === "users"
-                  ? totalUserPages
-                  : totalReservationPages
-              }
+              totalPages={activeTab === "users" ? totalUserPages : totalReservationPages}
               onPageChange={setCurrentPage}
-              totalItems={
-                activeTab === "users"
-                  ? totalUsers
-                  : totalReservations
-              }
+              totalItems={activeTab === "users" ? totalUsers : totalReservations}
               placeholder={
                 activeTab === "users"
                   ? "Search users by name, phone, email, or flat number..."
@@ -542,17 +537,11 @@ export default function SiteSecurityDashboard() {
               </TabsList>
 
               <TabsContent value="pickup-pending" className="space-y-4">
-                <ReservationList
-                  reservations={currentReservations}
-                  onReservationClick={handleReservationCardClick}
-                />
+                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} />
               </TabsContent>
 
               <TabsContent value="drop-pending" className="space-y-4">
-                <ReservationList
-                  reservations={currentReservations}
-                  onReservationClick={handleReservationCardClick}
-                />
+                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} />
               </TabsContent>
             </Tabs>
           </TabsContent>
@@ -566,17 +555,11 @@ export default function SiteSecurityDashboard() {
               </TabsList>
 
               <TabsContent value="drop-cancelled" className="space-y-4">
-                <ReservationList
-                  reservations={currentReservations}
-                  onReservationClick={handleReservationCardClick}
-                />
+                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} />
               </TabsContent>
 
               <TabsContent value="pickup-completed" className="space-y-4">
-                <ReservationList
-                  reservations={currentReservations}
-                  onReservationClick={handleReservationCardClick}
-                />
+                <ReservationList reservations={currentReservations} onReservationClick={handleReservationCardClick} />
               </TabsContent>
             </Tabs>
           </TabsContent>
@@ -587,9 +570,7 @@ export default function SiteSecurityDashboard() {
           <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
             <DialogHeader>
               <DialogTitle>Add New User</DialogTitle>
-              <DialogDescription>
-                Fill in the details to add a new user to this location.
-              </DialogDescription>
+              <DialogDescription>Fill in the details to add a new user to this location.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
@@ -656,9 +637,7 @@ export default function SiteSecurityDashboard() {
           <DialogContent className="min-w-[300px] max-w-[480px] mx-auto max-h-[80vh] overflow-hidden flex flex-col">
             <DialogHeader>
               <DialogTitle>Select User for Reservation</DialogTitle>
-              <DialogDescription>
-                Choose a user to create a reservation for.
-              </DialogDescription>
+              <DialogDescription>Choose a user to create a reservation for.</DialogDescription>
             </DialogHeader>
             <div className="flex-1 overflow-auto">
               <div className="space-y-2">
@@ -694,9 +673,7 @@ export default function SiteSecurityDashboard() {
           <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
             <DialogHeader>
               <DialogTitle>Confirm User Selection</DialogTitle>
-              <DialogDescription>
-                Create a reservation for the selected user?
-              </DialogDescription>
+              <DialogDescription>Create a reservation for the selected user?</DialogDescription>
             </DialogHeader>
             {selectedUser && (
               <div className="py-4">
@@ -715,9 +692,7 @@ export default function SiteSecurityDashboard() {
               <Button variant="outline" onClick={() => setShowConfirmUserDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleConfirmUserForReservation}>
-                Create Reservation
-              </Button>
+              <Button onClick={handleConfirmUserForReservation}>Create Reservation</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
