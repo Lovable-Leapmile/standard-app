@@ -359,7 +359,7 @@ export default function SiteAdminDashboard() {
       {currentLocationName && (
         <div className="bg-primary/10 border-b border-primary/20 py-2 px-4">
           <div className="max-w-4xl mx-auto flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-800 opacity-40" />
+            <MapPin className="w-5 h-5 text-gray-800 opacity-40" />
             <span className="text-sm font-medium text-foreground">{currentLocationName}</span>
           </div>
         </div>
@@ -431,7 +431,7 @@ export default function SiteAdminDashboard() {
           <TabsContent value="users" className="space-y-4">
             {currentUsers.length === 0 ? (
               <div className="text-center py-20">
-                <User className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-40" />
+                <User className="w-5 h-5 text-gray-800 opacity-40 mx-auto mb-4" />
                 <p className="text-muted-foreground">
                   {searchQuery ? "No users found matching your search." : "No users found for this location."}
                 </p>
@@ -671,7 +671,7 @@ export default function SiteAdminDashboard() {
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                        <User className="w-4 h-4 text-primary" />
+                        <User className="w-5 h-5 text-gray-800 opacity-40" />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-medium">{locationUser.user_name}</h4>
@@ -703,7 +703,7 @@ export default function SiteAdminDashboard() {
           {selectedUser && (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-muted-foreground" />
+                <User className="w-5 h-5 text-gray-800 opacity-40" />
                 <span className="font-medium">{selectedUser.user_name}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -739,7 +739,7 @@ export default function SiteAdminDashboard() {
           {userToRemove && (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-muted-foreground" />
+                <User className="w-5 h-5 text-gray-800 opacity-40" />
                 <span className="font-medium">{userToRemove.user_name}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -798,7 +798,7 @@ function ReservationList({
   if (reservations.length === 0) {
     return (
       <div className="text-center py-20">
-        <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+        <Package className="w-5 h-5 text-gray-800 opacity-40 mx-auto mb-4" />
         <p className="text-muted-foreground">
           {searchQuery ? "No reservations found matching your search." : "No reservations found."}
         </p>
@@ -816,7 +816,7 @@ function ReservationList({
         >
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-              <Package className="w-5 h-5 text-primary" />
+              <Package className="w-5 h-5 text-gray-800 opacity-40" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-foreground truncate">{reservation.user_name || "Unknown User"}</h3>
