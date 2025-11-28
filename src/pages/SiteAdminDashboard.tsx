@@ -396,7 +396,7 @@ export default function SiteAdminDashboard() {
             <Button
               variant="outline"
               onClick={handleOpenUserSelectionDialog}
-              className="flex items-center gap-2 border-gray-800"
+              className="flex items-center gap-2 border-gray-400"
             >
               <Plus className="w-4 h-4" />
               Create Reservation
