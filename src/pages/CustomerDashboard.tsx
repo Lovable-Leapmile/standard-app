@@ -268,7 +268,7 @@ export default function CustomerDashboard() {
       {currentLocationName && (
         <div className="bg-primary/10 border-b border-primary/20 py-2 px-4">
           <div className="max-w-md mx-auto flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-800 opacity-40" />
+            <MapPin className="w-5 h-5 text-gray-800 opacity-40" />
             <span className="text-sm font-medium text-foreground">{currentLocationName}</span>
           </div>
         </div>
