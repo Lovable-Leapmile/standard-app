@@ -140,7 +140,7 @@
 @layer components {
   /* Glassmorphism Card */
   .glass-card {
-    @apply backdrop-blur-md bg-white/10 border border-white/20 shadow-lg;
+    @apply backdrop-blur-md bg-white/10 border border-border/20 shadow-lg;
   }
   
   /* 3D Card Effects - Removed hover effects */
