@@ -525,7 +525,7 @@ export default function Profile() {
 
         {/* Remove User Confirmation Dialog */}
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-          <DialogContent>
+          <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
             <DialogHeader>
               <DialogTitle>Remove User from Location</DialogTitle>
               <DialogDescription>

@@ -149,7 +149,7 @@ export function Header({ title, showSettings = true }: HeaderProps) {
       </header>
 
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="min-w-[300px] max-w-[480px] mx-auto">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
             <AlertDialogDescription>

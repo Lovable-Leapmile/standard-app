@@ -320,7 +320,7 @@ export default function ReservationDetails() {
 
       {/* Cancel Confirmation Dialog */}
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="min-w-[300px] max-w-[480px] mx-auto">
           <AlertDialogHeader>
             <AlertDialogTitle>Cancel Reservation?</AlertDialogTitle>
             <AlertDialogDescription>

@@ -584,7 +584,7 @@ export default function SiteSecurityDashboard() {
 
         {/* Add User Dialog */}
         <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
-          <DialogContent className="max-w-md mx-auto">
+          <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
             <DialogHeader>
               <DialogTitle>Add New User</DialogTitle>
               <DialogDescription>
@@ -653,7 +653,7 @@ export default function SiteSecurityDashboard() {
 
         {/* User Selection Dialog */}
         <Dialog open={showUserSelectionDialog} onOpenChange={setShowUserSelectionDialog}>
-          <DialogContent className="max-w-lg mx-auto max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogContent className="min-w-[300px] max-w-[480px] mx-auto max-h-[80vh] overflow-hidden flex flex-col">
             <DialogHeader>
               <DialogTitle>Select User for Reservation</DialogTitle>
               <DialogDescription>
@@ -691,7 +691,7 @@ export default function SiteSecurityDashboard() {
 
         {/* Confirm User Dialog */}
         <Dialog open={showConfirmUserDialog} onOpenChange={setShowConfirmUserDialog}>
-          <DialogContent className="max-w-sm mx-auto">
+          <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
             <DialogHeader>
               <DialogTitle>Confirm User Selection</DialogTitle>
               <DialogDescription>

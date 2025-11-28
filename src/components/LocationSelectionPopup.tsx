@@ -102,7 +102,7 @@ export const LocationSelectionPopup = ({ userId, onLocationConfirmed }: Location
 
   return (
     <Dialog open={true} modal={true}>
-      <DialogContent className="sm:max-w-md" hideClose>
+      <DialogContent className="min-w-[300px] max-w-[480px] mx-auto" hideClose>
         <DialogHeader>
           <DialogTitle>Select Location</DialogTitle>
           <DialogDescription>

@@ -22,7 +22,7 @@ export const ApiBaseUrlPopup = ({ open, onSubmit }: ApiBaseUrlPopupProps) => {
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="min-w-[300px] max-w-[480px] mx-auto">
         <DialogHeader>
           <DialogTitle>Configure API Base URL</DialogTitle>
           <DialogDescription>
