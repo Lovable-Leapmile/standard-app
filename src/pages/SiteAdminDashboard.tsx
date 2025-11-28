@@ -393,7 +393,11 @@ export default function SiteAdminDashboard() {
               <UserPlus className="w-4 h-4" />
               Add User
             </Button>
-            <Button variant="outline" onClick={handleOpenUserSelectionDialog} className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={handleOpenUserSelectionDialog}
+              className="flex items-center gap-2 border-gray-800"
+            >
               <Plus className="w-4 h-4" />
               Create Reservation
             </Button>
@@ -530,7 +534,10 @@ export default function SiteAdminDashboard() {
 
       {/* Add User Dialog */}
       <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
-        <DialogContent className="min-w-[300px] max-w-[480px] mx-auto max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="min-w-[300px] max-w-[480px] mx-auto max-h-[90vh] overflow-y-auto"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>Add New User</DialogTitle>
             <DialogDescription>Create a new user account for this location.</DialogDescription>
