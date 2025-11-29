@@ -76,8 +76,6 @@ export const LocationSelectionPopup = ({ userId, onLocationConfirmed }: Location
     setIsLoading(true);
     try {
       await apiService.addUserLocation(userId, selectedLocationId);
-      
-      // Store location_id in localStorage
       localStorage.setItem('current_location_id', selectedLocationId);
       
       // Get and save location name

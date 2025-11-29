@@ -221,16 +221,12 @@ export default function SiteAdminDashboard() {
     try {
       // First create the user
       const response = await apiService.registerUser(newUserForm);
-      
-      // Extract user_id from API response
-      const newUserId = response.id || response.user_id || response.records?.[0]?.id;
+      const newUserId = response.id || response.user_id;
 
-      if (!newUserId) {
-        throw new Error("Failed to get user ID from response");
+      // Then add the user to the current location
+      if (newUserId) {
+        await apiService.addUserToLocation(newUserId, currentLocationId);
       }
-
-      // Add user's location using the new API endpoint
-      await apiService.addUserLocation(newUserId, currentLocationId);
 
       toast.success("User added successfully!");
       setShowAddUserDialog(false);
