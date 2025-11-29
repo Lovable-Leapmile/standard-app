@@ -145,9 +145,10 @@ export const apiService = {
     }
 
     const data = await response.json();
-    // Store the access token for future use
+    // Store the access token and login timestamp for 1-week expiry validation
     if (data.access_token) {
       localStorage.setItem('auth_token', data.access_token);
+      localStorage.setItem('auth_token_timestamp', Date.now().toString());
     }
     
     return data;
