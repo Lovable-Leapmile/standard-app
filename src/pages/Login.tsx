@@ -11,7 +11,6 @@ import { OTPInput } from "@/components/OTPInput";
 import { LocationDetectionPopup } from "@/components/LocationDetectionPopup";
 import { LocationSelectionPopup } from "@/components/LocationSelectionPopup";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
-import { isTokenValid, clearAuthToken } from "@/utils/tokenValidation";
 const qikpodLogo = "https://leapmile-website.blr1.cdn.digitaloceanspaces.com/Qikpod/Images/q70.png";
 export default function Login() {
   const navigate = useNavigate();
@@ -27,17 +26,6 @@ export default function Login() {
   const { showLocationPopup, closeLocationPopup } = useLocationDetection(userData?.id, currentLocationId);
   useEffect(() => {
     if (isLoggedIn()) {
-      // Check if token is still valid (within 1 week)
-      if (!isTokenValid()) {
-        clearAuthToken();
-        toast({
-          title: "Session Expired",
-          description: "Your session has expired. Please login again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
       const userData = JSON.parse(localStorage.getItem("qikpod_user") || "{}");
 
       // Treat QPStaff as SiteAdmin
@@ -58,7 +46,7 @@ export default function Login() {
       return;
     }
     extractPodNameFromUrl();
-  }, [navigate, toast]);
+  }, [navigate]);
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (countdown > 0) {

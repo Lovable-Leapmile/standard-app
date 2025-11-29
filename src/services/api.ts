@@ -145,10 +145,9 @@ export const apiService = {
     }
 
     const data = await response.json();
-    // Store the access token and login timestamp for 1-week expiry validation
+    // Store the access token for future use
     if (data.access_token) {
       localStorage.setItem('auth_token', data.access_token);
-      localStorage.setItem('auth_token_timestamp', Date.now().toString());
     }
     
     return data;
@@ -316,7 +315,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${getBaseUrl()}/podcore/users/locations/`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -716,7 +715,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${getBaseUrl()}/podcore/users/locations/`, {
+    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
