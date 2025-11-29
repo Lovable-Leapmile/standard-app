@@ -316,7 +316,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
     
-    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
+    const response = await fetch(`${getBaseUrl()}/podcore/users/locations/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -716,7 +716,7 @@ export const apiService = {
     const authToken = localStorage.getItem('auth_token');
     const authorization = authToken ? `Bearer ${authToken}` : AUTH_TOKEN;
 
-    const response = await fetch(`${getBaseUrl()}/users/locations/`, {
+    const response = await fetch(`${getBaseUrl()}/podcore/users/locations/`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',
