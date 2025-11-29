@@ -43,7 +43,9 @@ export default function Locations() {
 
   const handleLocationSelect = (location: UserLocation) => {
     saveLastLocation(location.location_name);
+    // Store location_id when manually changed
     saveLocationId(location.location_id.toString());
+    localStorage.setItem('current_location_name', location.location_name);
     navigate("/customer-dashboard");
   };
 
