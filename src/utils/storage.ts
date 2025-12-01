@@ -90,3 +90,9 @@ export const saveLocationName = (locationName: string): void => {
 export const getLocationName = (): string | null => {
   return localStorage.getItem('current_location_name');
 };
+
+// Save both location ID and name together
+export const saveLocation = (locationId: string, locationName: string): void => {
+  saveLocationId(locationId);
+  saveLocationName(locationName);
+};

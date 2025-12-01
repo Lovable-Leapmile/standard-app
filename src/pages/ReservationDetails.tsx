@@ -16,6 +16,7 @@ import {
 import { getUserData, isLoggedIn } from "@/utils/storage";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
+import { maskPhoneNumber } from "@/utils/phoneUtils";
 interface ReservationDetail {
   id: string;
   pod_name: string;
@@ -85,12 +86,18 @@ export default function ReservationDetails() {
     }
   };
   const getOTPDisplay = (otpType: "drop" | "pickup") => {
-    if (!reservationDetails) return "*****";
+    if (!reservationDetails) return "******";
+    
+    // For SiteSecurity, always mask OTPs
+    if (user?.user_type === "SiteSecurity") {
+      return "******";
+    }
+    
     const status = reservationDetails.reservation_status;
     if (otpType === "drop") {
-      return status === "DropPending" ? reservationDetails.drop_otp || "*****" : "*****";
+      return status === "DropPending" ? reservationDetails.drop_otp || "******" : "******";
     } else {
-      return status === "PickupPending" ? reservationDetails.pickup_otp || "*****" : "*****";
+      return status === "PickupPending" ? reservationDetails.pickup_otp || "******" : "******";
     }
   };
   const handleResendDropOTP = async () => {
@@ -248,12 +255,24 @@ export default function ReservationDetails() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Drop by Phone</p>
-              <p className="text-base text-foreground">{reservationDetails.drop_by_phone || "N/A"}</p>
+              <p className="text-base text-foreground">
+                {reservationDetails.drop_by_phone
+                  ? user?.user_type === "SiteSecurity"
+                    ? maskPhoneNumber(reservationDetails.drop_by_phone)
+                    : reservationDetails.drop_by_phone
+                  : "N/A"}
+              </p>
             </div>
 
             <div>
               <p className="text-sm font-medium text-muted-foreground">Pickup by Phone</p>
-              <p className="text-base text-foreground">{reservationDetails.pickup_by_phone || "N/A"}</p>
+              <p className="text-base text-foreground">
+                {reservationDetails.pickup_by_phone
+                  ? user?.user_type === "SiteSecurity"
+                    ? maskPhoneNumber(reservationDetails.pickup_by_phone)
+                    : reservationDetails.pickup_by_phone
+                  : "N/A"}
+              </p>
             </div>
           </div>
         </Card>

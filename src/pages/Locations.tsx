@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, ChevronRight, Plus, ArrowLeft } from "lucide-react";
-import { getUserData, isLoggedIn, saveLastLocation, saveLocationId } from "@/utils/storage";
+import { getUserData, isLoggedIn, saveLastLocation, saveLocationId, saveLocationName } from "@/utils/storage";
 import { UserLocation } from "@/services/api";
 import { apiService } from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
@@ -44,6 +44,7 @@ export default function Locations() {
   const handleLocationSelect = (location: UserLocation) => {
     saveLastLocation(location.location_name);
     saveLocationId(location.location_id.toString());
+    saveLocationName(location.location_name);
     navigate("/customer-dashboard");
   };
 
