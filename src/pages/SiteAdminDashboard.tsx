@@ -212,6 +212,20 @@ export default function SiteAdminDashboard() {
   };
 
   const handleAddUser = async () => {
+    // Validate mandatory fields
+    if (!newUserForm.user_name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    if (!newUserForm.user_phone.trim() || newUserForm.user_phone.length !== 10) {
+      toast.error("Valid 10-digit phone number is required");
+      return;
+    }
+    if (!newUserForm.user_email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+
     if (!currentLocationId) {
       toast.error("No location selected");
       return;

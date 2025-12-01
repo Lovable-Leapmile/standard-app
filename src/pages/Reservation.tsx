@@ -144,7 +144,19 @@ export default function Reservation() {
               </div>
               <div>
                 <p className="text-sm font-medium">Phone Number</p>
-                <p className="text-base">{isLoadingCustomer ? "Loading..." : reservationUser?.user_phone || "N/A"}</p>
+                <p className="text-base">
+                  {isLoadingCustomer 
+                    ? "Loading..." 
+                    : reservationUser?.user_phone 
+                      ? loggedInUser?.user_type === "SiteSecurity"
+                        ? `******${reservationUser.user_phone.slice(-4)}`
+                        : reservationUser.user_phone
+                      : "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Flat Number</p>
+                <p className="text-base">{isLoadingCustomer ? "Loading..." : reservationUser?.user_flatno || "N/A"}</p>
               </div>
             </div>
           </div>

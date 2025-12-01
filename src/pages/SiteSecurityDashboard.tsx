@@ -218,6 +218,20 @@ export default function SiteSecurityDashboard() {
   };
 
   const handleAddUser = async () => {
+    // Validate mandatory fields
+    if (!newUserForm.user_name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    if (!newUserForm.user_phone.trim() || newUserForm.user_phone.length !== 10) {
+      toast.error("Valid 10-digit phone number is required");
+      return;
+    }
+    if (!newUserForm.user_email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+
     if (!currentLocationId) {
       toast.error("No location selected");
       return;
@@ -654,6 +668,10 @@ export default function SiteSecurityDashboard() {
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-foreground truncate">{user.user_name}</h4>
                         <p className="text-sm text-muted-foreground truncate">{maskPhoneNumber(user.user_phone)}</p>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Home className="w-3 h-3" />
+                          <span>Flat: {user.user_flatno || "N/A"}</span>
+                        </div>
                       </div>
                     </div>
                   </Card>
@@ -684,6 +702,10 @@ export default function SiteSecurityDashboard() {
                   <div>
                     <h4 className="font-medium text-foreground">{selectedUser.user_name}</h4>
                     <p className="text-sm text-muted-foreground">{maskPhoneNumber(selectedUser.user_phone)}</p>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Home className="w-3 h-3" />
+                      <span>Flat: {selectedUser.user_flatno || "N/A"}</span>
+                    </div>
                   </div>
                 </div>
               </div>
