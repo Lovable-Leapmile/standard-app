@@ -251,9 +251,8 @@ export default function SiteAdminDashboard() {
         user_address: "",
         user_flatno: "",
       });
-      if (activeTab === "users") {
-        await loadLocationUsers();
-      }
+      // Always reload users to reflect the newly added user
+      await loadLocationUsers();
     } catch (error: any) {
       console.error("Error adding user:", error);
       toast.error(error?.message || "Failed to add user");
