@@ -243,12 +243,19 @@ export default function SiteSecurityDashboard() {
       const response = await apiService.registerUser(newUserForm);
       const newUserId = response.id || response.user_id;
 
-      // Then add the user to the current location
-      if (newUserId) {
-        await apiService.addUserToLocation(newUserId, currentLocationId);
+      if (!newUserId) {
+        throw new Error("User ID not returned from server");
       }
 
-      toast.success("User added successfully!");
+      // Then add the user to the current location
+      try {
+        await apiService.addUserToLocation(newUserId, currentLocationId);
+        toast.success("User added and location assigned.");
+      } catch (locationError: any) {
+        console.error("Error assigning location to user:", locationError);
+        toast.error(`User created but location assignment failed: ${locationError?.message || "Unknown error"}`);
+      }
+
       setShowAddUserDialog(false);
       setNewUserForm({
         user_name: "",
