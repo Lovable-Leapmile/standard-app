@@ -90,17 +90,12 @@ export default function ReservationDetails() {
     
     const status = reservationDetails.reservation_status;
     
-    // For SiteSecurity, always mask Pickup OTP but show Drop OTP normally
-    if (user?.user_type === "SiteSecurity") {
-      if (otpType === "pickup") {
-        return "******";
-      } else {
-        // Show drop OTP if status is DropPending
-        return status === "DropPending" ? reservationDetails.drop_otp || "******" : "******";
-      }
+    // For SiteSecurity, ALWAYS mask Pickup OTP - it should never be visible
+    if (user?.user_type === "SiteSecurity" && otpType === "pickup") {
+      return "******";
     }
     
-    // For other users, show OTPs based on status
+    // For all users, show OTPs based on status
     if (otpType === "drop") {
       return status === "DropPending" ? reservationDetails.drop_otp || "******" : "******";
     } else {
